@@ -124,7 +124,7 @@ select {
 .site-nav {
   display: flex;
   justify-content: center;
-  gap: 22px;
+  gap: 18px;
   font-weight: 700;
   color: #31536d;
 }
@@ -291,9 +291,17 @@ h3 {
 
 .button {
   min-width: 190px;
-  padding: 15px 20px;
+  min-height: 54px;
+  padding: 16px 22px;
   border-radius: 999px;
   transition: transform 160ms ease, background-color 160ms ease, border-color 160ms ease;
+}
+
+.button-large {
+  min-width: 230px;
+  min-height: 60px;
+  padding: 18px 26px;
+  font-size: 1.05rem;
 }
 
 .button:hover {
@@ -450,6 +458,60 @@ h3 {
   border-radius: 8px;
 }
 
+.section-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.clinic-gallery {
+  display: grid;
+  grid-template-columns: 1.25fr repeat(2, 1fr);
+  gap: 16px;
+}
+
+.clinic-photo {
+  position: relative;
+  min-height: 230px;
+  margin: 0;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 12px 24px rgba(25, 65, 93, 0.1);
+}
+
+.clinic-photo-featured {
+  grid-row: span 2;
+  min-height: 480px;
+}
+
+.clinic-photo img {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+.clinic-photo-featured img {
+  aspect-ratio: auto;
+}
+
+.clinic-photo figcaption {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  max-width: calc(100% - 24px);
+  padding: 8px 10px;
+  color: #fff;
+  background: rgba(23, 50, 77, 0.82);
+  border-radius: 8px;
+  font-family: "Nunito", Arial, sans-serif;
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+
 .service-groups {
   display: grid;
   gap: 34px;
@@ -533,6 +595,43 @@ h3 {
 
 .accent-yellow::before {
   background: var(--yellow);
+}
+
+.promo-strip {
+  display: grid;
+  grid-auto-columns: minmax(260px, 330px);
+  grid-auto-flow: column;
+  gap: 18px;
+  overflow-x: auto;
+  padding: 4px 4px 18px;
+  scroll-snap-type: x mandatory;
+}
+
+.promo-strip::-webkit-scrollbar {
+  height: 10px;
+}
+
+.promo-strip::-webkit-scrollbar-thumb {
+  background: rgba(35, 105, 167, 0.35);
+  border-radius: 999px;
+}
+
+.promo-card {
+  min-height: 360px;
+  margin: 0;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 12px 24px rgba(25, 65, 93, 0.1);
+  scroll-snap-align: start;
+}
+
+.promo-card img {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 3 / 4.15;
+  object-fit: cover;
 }
 
 .benefit-grid {
@@ -619,6 +718,43 @@ h3 {
   border-color: #cbe8d6;
 }
 
+.team-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+}
+
+.team-photo-grid img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  object-position: top center;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 12px 24px rgba(25, 65, 93, 0.1);
+}
+
+.team-name-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-top: 22px;
+}
+
+.team-name-grid article {
+  min-height: 116px;
+  padding: 18px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.team-name-grid p {
+  margin: 8px 0 0;
+  color: var(--muted);
+}
+
 .contact-grid {
   display: grid;
   grid-template-columns: 0.86fr 1.14fr;
@@ -632,13 +768,27 @@ h3 {
 
 .contact-info a,
 .contact-info div,
-.map-placeholder {
+.map-placeholder,
+.map-frame {
   display: grid;
   gap: 4px;
   padding: 20px;
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 8px;
+}
+
+.contact-info .contact-cta {
+  color: #fff;
+  background: var(--blue);
+  border-color: var(--blue);
+  font-family: "Nunito", Arial, sans-serif;
+  font-size: 1.12rem;
+  font-weight: 800;
+}
+
+.contact-info .contact-cta span {
+  color: var(--gold-soft);
 }
 
 .contact-info span {
@@ -667,6 +817,12 @@ h3 {
 .map-placeholder span {
   max-width: 370px;
   color: var(--muted);
+}
+
+.map-frame {
+  width: 100%;
+  min-height: 440px;
+  padding: 0;
 }
 
 .floating-whatsapp {
@@ -758,8 +914,16 @@ h3 {
 
   .service-grid,
   .package-grid,
-  .team-grid {
+  .team-grid,
+  .team-photo-grid,
+  .team-name-grid,
+  .clinic-gallery {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .clinic-photo-featured {
+    grid-column: span 2;
+    grid-row: auto;
   }
 
   .benefit-grid {
@@ -813,6 +977,7 @@ h3 {
   .hero-actions,
   .button {
     width: 100%;
+    min-height: 58px;
   }
 
   .hero-note {
@@ -827,9 +992,21 @@ h3 {
   .package-grid,
   .benefit-grid,
   .team-grid,
+  .team-photo-grid,
+  .team-name-grid,
+  .clinic-gallery,
   .contact-grid,
   .cta-band {
     grid-template-columns: 1fr;
+  }
+
+  .clinic-photo-featured {
+    grid-column: auto;
+  }
+
+  .clinic-photo,
+  .clinic-photo-featured {
+    min-height: 360px;
   }
 
   .intro-strip {
@@ -851,11 +1028,26 @@ h3 {
   .service-card,
   .package-card,
   .team-card,
+  .team-name-grid article,
   .benefit-item,
   .contact-info a,
   .contact-info div,
-  .map-placeholder {
+  .map-placeholder,
+  .map-frame {
     padding: 18px;
+  }
+
+  .team-photo-grid img {
+    height: 390px;
+  }
+
+  .promo-strip {
+    grid-auto-columns: minmax(250px, 86vw);
+  }
+
+  .map-frame {
+    min-height: 360px;
+    padding: 0;
   }
 
   .package-card:nth-child(5) {
