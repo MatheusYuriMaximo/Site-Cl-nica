@@ -75,7 +75,7 @@ select {
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
-  gap: 24px;
+  gap: 16px;
   width: 100%;
   min-height: 78px;
   padding: 14px max(20px, calc((100% - 1120px) / 2));
@@ -88,7 +88,7 @@ select {
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  min-width: 218px;
+  min-width: 188px;
 }
 
 .brand-mark {
@@ -124,8 +124,9 @@ select {
 .site-nav {
   display: flex;
   justify-content: center;
-  gap: 18px;
+  gap: 14px;
   font-weight: 700;
+  font-size: 0.94rem;
   color: #31536d;
 }
 
@@ -153,11 +154,12 @@ select {
 }
 
 .header-cta {
-  padding: 12px 16px;
+  padding: 12px 14px;
   color: #fff;
   background: var(--blue);
   border-radius: 999px;
   box-shadow: 0 10px 24px rgba(35, 105, 167, 0.2);
+  white-space: nowrap;
 }
 
 .header-cta:hover,
@@ -236,7 +238,7 @@ h3 {
   font-family: "Nunito", Arial, sans-serif;
   letter-spacing: 0;
   line-height: 1.08;
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
 }
 
 h1 {
@@ -462,29 +464,34 @@ h3 {
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
-  margin-top: 28px;
+  margin-top: 38px;
 }
 
 .clinic-gallery {
   display: grid;
-  grid-template-columns: 1.25fr repeat(2, 1fr);
+  grid-auto-columns: minmax(280px, 390px);
+  grid-auto-flow: column;
   gap: 16px;
+  overflow-x: auto;
+  padding: 4px 4px 18px;
+  scroll-snap-type: x mandatory;
 }
 
 .clinic-photo {
   position: relative;
-  min-height: 230px;
+  min-height: 430px;
   margin: 0;
   overflow: hidden;
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 8px;
   box-shadow: 0 12px 24px rgba(25, 65, 93, 0.1);
+  scroll-snap-align: start;
 }
 
 .clinic-photo-featured {
-  grid-row: span 2;
-  min-height: 480px;
+  grid-row: auto;
+  min-height: 430px;
 }
 
 .clinic-photo img {
@@ -501,7 +508,8 @@ h3 {
 .clinic-photo figcaption {
   position: absolute;
   left: 12px;
-  bottom: 12px;
+  top: 12px;
+  bottom: auto;
   max-width: calc(100% - 24px);
   padding: 8px 10px;
   color: #fff;
@@ -599,7 +607,7 @@ h3 {
 
 .promo-strip {
   display: grid;
-  grid-auto-columns: minmax(260px, 330px);
+  grid-auto-columns: minmax(250px, 320px);
   grid-auto-flow: column;
   gap: 18px;
   overflow-x: auto;
@@ -720,44 +728,30 @@ h3 {
 
 .team-photo-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 14px;
+  grid-auto-columns: minmax(260px, 340px);
+  grid-auto-flow: column;
+  gap: 18px;
+  overflow-x: auto;
+  padding: 4px 4px 18px;
+  scroll-snap-type: x mandatory;
 }
 
 .team-photo-grid img {
   width: 100%;
-  height: 260px;
+  height: auto;
+  aspect-ratio: 3 / 4;
   object-fit: cover;
   object-position: top center;
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 8px;
   box-shadow: 0 12px 24px rgba(25, 65, 93, 0.1);
-}
-
-.team-name-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
-  margin-top: 22px;
-}
-
-.team-name-grid article {
-  min-height: 116px;
-  padding: 18px;
-  background: #fff;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-}
-
-.team-name-grid p {
-  margin: 8px 0 0;
-  color: var(--muted);
+  scroll-snap-align: start;
 }
 
 .contact-grid {
   display: grid;
-  grid-template-columns: 0.86fr 1.14fr;
+  grid-template-columns: 0.54fr 1.46fr;
   gap: 24px;
 }
 
@@ -821,7 +815,7 @@ h3 {
 
 .map-frame {
   width: 100%;
-  min-height: 440px;
+  min-height: 720px;
   padding: 0;
 }
 
@@ -864,7 +858,7 @@ h3 {
   font-weight: 700;
 }
 
-@media (max-width: 1060px) {
+@media (max-width: 1180px) {
   .site-header {
     grid-template-columns: auto auto;
   }
@@ -914,15 +908,12 @@ h3 {
 
   .service-grid,
   .package-grid,
-  .team-grid,
-  .team-photo-grid,
-  .team-name-grid,
-  .clinic-gallery {
+  .team-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
   .clinic-photo-featured {
-    grid-column: span 2;
+    grid-column: auto;
     grid-row: auto;
   }
 
@@ -972,6 +963,7 @@ h3 {
 
   h1 {
     font-size: clamp(2.45rem, 16vw, 4.25rem);
+    overflow-wrap: anywhere;
   }
 
   .hero-actions,
@@ -992,9 +984,6 @@ h3 {
   .package-grid,
   .benefit-grid,
   .team-grid,
-  .team-photo-grid,
-  .team-name-grid,
-  .clinic-gallery,
   .contact-grid,
   .cta-band {
     grid-template-columns: 1fr;
@@ -1028,7 +1017,6 @@ h3 {
   .service-card,
   .package-card,
   .team-card,
-  .team-name-grid article,
   .benefit-item,
   .contact-info a,
   .contact-info div,
@@ -1038,9 +1026,11 @@ h3 {
   }
 
   .team-photo-grid img {
-    height: 390px;
+    height: auto;
   }
 
+  .clinic-gallery,
+  .team-photo-grid,
   .promo-strip {
     grid-auto-columns: minmax(250px, 86vw);
   }
