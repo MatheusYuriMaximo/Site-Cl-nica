@@ -6,6 +6,14 @@
  */
 
 get_header();
+$na_whatsapp_url       = neuroaprender_whatsapp_url();
+$na_whatsapp_number    = (string) neuroaprender_field( 'na_whatsapp_number', '+55 96 9169-0204' );
+$na_instagram_label    = (string) neuroaprender_field( 'na_instagram_label', '@clinicaescolaneuroaprender' );
+$na_instagram_url      = (string) neuroaprender_field( 'na_instagram_url', 'https://www.instagram.com/clinicaescolaneuroaprender' );
+$na_address            = (string) neuroaprender_field( 'na_address', 'Av. Quinze de Julho, 1039 - Buritizal, Macapá - AP, 68904-720, Brasil' );
+$na_hours              = (string) neuroaprender_field( 'na_hours', '08:00 às 12:00 e 14:00 às 18:00' );
+$na_maps_url           = neuroaprender_maps_url();
+$na_mascot_url         = neuroaprender_image_uri( 'na_mascot_image', 'assets/mascote-neuroaprender-novo-transparente.webp' );
 ?>
 <header class="site-header" id="inicio">
       <a class="brand" href="#inicio" aria-label="Clínica Escola NeuroAprender">
@@ -34,7 +42,7 @@ get_header();
         <a href="#contato">Contato</a>
       </nav>
 
-      <a class="header-cta" href="https://wa.me/559691690204" target="_blank" rel="noopener">
+      <a class="header-cta" href="<?php echo esc_url( $na_whatsapp_url ); ?>" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path>
           <path d="M8 9h8"></path>
@@ -47,18 +55,17 @@ get_header();
     <main>
       <section class="hero section-band" aria-labelledby="hero-title">
         <div class="hero-copy">
-          <p class="eyebrow">Desenvolvimento infantil, saúde e aprendizagem</p>
-          <h1 id="hero-title">Clínica Escola <span class="keep-together">NeuroAprender</span></h1>
-          <p class="hero-line">Todo cérebro aprende.</p>
+          <p class="eyebrow"><?php neuroaprender_text( 'na_hero_eyebrow', 'Desenvolvimento infantil, saúde e aprendizagem' ); ?></p>
+          <h1 id="hero-title"><?php neuroaprender_text( 'na_hero_title_prefix', 'Clínica Escola' ); ?> <span class="keep-together"><?php neuroaprender_text( 'na_hero_title_highlight', 'NeuroAprender' ); ?></span></h1>
+          <p class="hero-line"><?php neuroaprender_text( 'na_hero_line', 'Todo cérebro aprende.' ); ?></p>
           <p class="hero-subtitle">
-            Cada criança tem seu tempo, e nós caminhamos junto com ela.
+            <?php neuroaprender_text( 'na_hero_subtitle', 'Cada criança tem seu tempo, e nós caminhamos junto com ela.' ); ?>
           </p>
           <p class="hero-text">
-            Unimos acolhimento, ciência e cuidado para apoiar o desenvolvimento infantil,
-            a aprendizagem e o bem-estar das famílias.
+            <?php neuroaprender_rich_text( 'na_hero_text', 'Unimos acolhimento, ciência e cuidado para apoiar o desenvolvimento infantil, a aprendizagem e o bem-estar das famílias.' ); ?>
           </p>
           <div class="hero-actions" aria-label="Ações principais">
-            <a class="button button-primary" href="https://wa.me/559691690204" target="_blank" rel="noopener">
+            <a class="button button-primary" href="<?php echo esc_url( $na_whatsapp_url ); ?>" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.32 1.77.6 2.61a2 2 0 0 1-.45 2.11L8 9.7a16 16 0 0 0 6.3 6.3l1.26-1.26a2 2 0 0 1 2.11-.45c.84.28 1.71.48 2.61.6A2 2 0 0 1 22 16.92z"></path>
               </svg>
@@ -75,10 +82,10 @@ get_header();
         </div>
 
         <div class="hero-visual" aria-label="Mascote da Clínica Escola NeuroAprender">
-          <img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/mascote-neuroaprender-novo-transparente.webp' ) ); ?>" alt="Mascote infantil acolhedor da Clínica Escola NeuroAprender" loading="eager" decoding="async" fetchpriority="high">
+          <img src="<?php echo esc_url( $na_mascot_url ); ?>" alt="Mascote infantil acolhedor da Clínica Escola NeuroAprender" loading="eager" decoding="async" fetchpriority="high">
           <div class="hero-note">
-            <strong>Atendimento interdisciplinar</strong>
-            <span>Saúde, educação e família caminhando juntas.</span>
+            <strong><?php neuroaprender_text( 'na_hero_note_title', 'Atendimento interdisciplinar' ); ?></strong>
+            <span><?php neuroaprender_text( 'na_hero_note_text', 'Saúde, educação e família caminhando juntas.' ); ?></span>
           </div>
         </div>
       </section>
@@ -101,22 +108,18 @@ get_header();
       <section class="section" id="sobre" aria-labelledby="sobre-title">
         <div class="section-heading">
           <p class="eyebrow">Sobre a clínica</p>
-          <h2 id="sobre-title">Cuidado que acolhe, orientação que transforma</h2>
+          <h2 id="sobre-title"><?php neuroaprender_text( 'na_about_title', 'Cuidado que acolhe, orientação que transforma' ); ?></h2>
         </div>
         <div class="split-content">
           <p>
-            A Clínica Escola NeuroAprender nasceu com o propósito de oferecer atendimentos
-            especializados para crianças, adolescentes e famílias, com um olhar humano,
-            interdisciplinar e individualizado.
+            <?php neuroaprender_rich_text( 'na_about_text_1', 'A Clínica Escola NeuroAprender nasceu com o propósito de oferecer atendimentos especializados para crianças, adolescentes e famílias, com um olhar humano, interdisciplinar e individualizado.' ); ?>
           </p>
           <p>
-            Trabalhamos com profissionais de diferentes áreas para compreender cada necessidade
-            de forma ampla, respeitando o ritmo de desenvolvimento, aprendizagem e evolução
-            de cada paciente.
+            <?php neuroaprender_rich_text( 'na_about_text_2', 'Trabalhamos com profissionais de diferentes áreas para compreender cada necessidade de forma ampla, respeitando o ritmo de desenvolvimento, aprendizagem e evolução de cada paciente.' ); ?>
           </p>
         </div>
         <div class="section-actions">
-          <a class="button button-primary button-large" href="https://wa.me/559691690204" target="_blank" rel="noopener">
+          <a class="button button-primary button-large" href="<?php echo esc_url( $na_whatsapp_url ); ?>" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.32 1.77.6 2.61a2 2 0 0 1-.45 2.11L8 9.7a16 16 0 0 0 6.3 6.3l1.26-1.26a2 2 0 0 1 2.11-.45c.84.28 1.71.48 2.61.6A2 2 0 0 1 22 16.92z"></path>
             </svg>
@@ -128,10 +131,9 @@ get_header();
       <section class="section section-tint" id="espaco" aria-labelledby="espaco-title">
         <div class="section-heading wide">
           <p class="eyebrow">Nosso espaço</p>
-          <h2 id="espaco-title">Ambientes preparados para acolher crianças, adolescentes e famílias</h2>
+          <h2 id="espaco-title"><?php neuroaprender_text( 'na_space_title', 'Ambientes preparados para acolher crianças, adolescentes e famílias' ); ?></h2>
           <p>
-            A clínica conta com recepção, consultórios e salas de atendimento organizadas para
-            oferecer conforto, privacidade e cuidado em cada etapa do acompanhamento.
+            <?php neuroaprender_rich_text( 'na_space_text', 'A clínica conta com recepção, consultórios e salas de atendimento organizadas para oferecer conforto, privacidade e cuidado em cada etapa do acompanhamento.' ); ?>
           </p>
         </div>
         <div class="gallery-shell">
@@ -185,7 +187,7 @@ get_header();
           </button>
         </div>
         <div class="section-actions">
-          <a class="button button-primary button-large" href="https://wa.me/559691690204" target="_blank" rel="noopener">
+          <a class="button button-primary button-large" href="<?php echo esc_url( $na_whatsapp_url ); ?>" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path>
               <path d="M8 9h8"></path>
@@ -199,7 +201,7 @@ get_header();
       <section class="section" id="servicos" aria-labelledby="servicos-title">
         <div class="section-heading wide">
           <p class="eyebrow">Nossos serviços</p>
-          <h2 id="servicos-title">Serviços especializados para desenvolvimento, saúde e aprendizagem</h2>
+          <h2 id="servicos-title"><?php neuroaprender_text( 'na_services_title', 'Serviços especializados para desenvolvimento, saúde e aprendizagem' ); ?></h2>
         </div>
 
         <div class="service-groups">
@@ -260,7 +262,7 @@ get_header();
           </article>
         </div>
         <div class="section-actions">
-          <a class="button button-primary button-large" href="https://wa.me/559691690204" target="_blank" rel="noopener">
+          <a class="button button-primary button-large" href="<?php echo esc_url( $na_whatsapp_url ); ?>" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path>
               <path d="M8 9h8"></path>
@@ -274,7 +276,7 @@ get_header();
       <section class="section" id="pacotes" aria-labelledby="pacotes-title">
         <div class="section-heading">
           <p class="eyebrow">Pacotes Educacionais NeuroAprender</p>
-          <h2 id="pacotes-title">Programas para fortalecer habilidades escolares</h2>
+          <h2 id="pacotes-title"><?php neuroaprender_text( 'na_packages_title', 'Programas para fortalecer habilidades escolares' ); ?></h2>
         </div>
         <div class="package-grid">
           <article class="package-card accent-blue">
@@ -299,7 +301,7 @@ get_header();
           </article>
         </div>
         <div class="section-actions">
-          <a class="button button-primary button-large" href="https://wa.me/559691690204" target="_blank" rel="noopener">
+          <a class="button button-primary button-large" href="<?php echo esc_url( $na_whatsapp_url ); ?>" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.32 1.77.6 2.61a2 2 0 0 1-.45 2.11L8 9.7a16 16 0 0 0 6.3 6.3l1.26-1.26a2 2 0 0 1 2.11-.45c.84.28 1.71.48 2.61.6A2 2 0 0 1 22 16.92z"></path>
             </svg>
@@ -311,10 +313,9 @@ get_header();
       <section class="section section-tint" id="avaliacoes" aria-labelledby="avaliacoes-title">
         <div class="section-heading wide">
           <p class="eyebrow">Avaliações e condições especiais</p>
-          <h2 id="avaliacoes-title">Pacotes de avaliação para compreender e orientar cada necessidade</h2>
+          <h2 id="avaliacoes-title"><?php neuroaprender_text( 'na_reviews_title', 'Pacotes de avaliação para compreender e orientar cada necessidade' ); ?></h2>
           <p>
-            Confira os materiais informativos da clínica e fale com a equipe para confirmar disponibilidade,
-            valores e melhor indicação para cada caso.
+            <?php neuroaprender_rich_text( 'na_reviews_text', 'Confira os materiais informativos da clínica e fale com a equipe para confirmar disponibilidade, valores e melhor indicação para cada caso.' ); ?>
           </p>
         </div>
         <div class="gallery-shell">
@@ -337,7 +338,7 @@ get_header();
           </button>
         </div>
         <div class="section-actions">
-          <a class="button button-primary button-large" href="https://wa.me/559691690204" target="_blank" rel="noopener">
+          <a class="button button-primary button-large" href="<?php echo esc_url( $na_whatsapp_url ); ?>" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path>
               <path d="M8 9h8"></path>
@@ -366,29 +367,28 @@ get_header();
 
       <section class="cta-band" aria-labelledby="cta-title">
         <div>
-          <p class="eyebrow">Orientação no momento certo</p>
-          <h2 id="cta-title">Percebeu alguma dificuldade no desenvolvimento ou aprendizagem da criança?</h2>
+          <p class="eyebrow"><?php neuroaprender_text( 'na_cta_eyebrow', 'Orientação no momento certo' ); ?></p>
+          <h2 id="cta-title"><?php neuroaprender_text( 'na_cta_title', 'Percebeu alguma dificuldade no desenvolvimento ou aprendizagem da criança?' ); ?></h2>
           <p>
-            Quanto antes a família busca orientação, mais possibilidades existem para compreender,
-            intervir e acompanhar de forma adequada.
+            <?php neuroaprender_rich_text( 'na_cta_text', 'Quanto antes a família busca orientação, mais possibilidades existem para compreender, intervir e acompanhar de forma adequada.' ); ?>
           </p>
         </div>
-        <a class="button button-primary" href="https://wa.me/559691690204" target="_blank" rel="noopener">
+        <a class="button button-primary" href="<?php echo esc_url( $na_whatsapp_url ); ?>" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path>
             <path d="M8 9h8"></path>
             <path d="M8 13h5"></path>
           </svg>
-          Falar com a NeuroAprender
+          <?php neuroaprender_text( 'na_cta_button', 'Falar com a NeuroAprender' ); ?>
         </a>
       </section>
 
       <section class="section" id="profissionais" aria-labelledby="profissionais-title">
         <div class="section-heading wide">
           <p class="eyebrow">Nossa equipe</p>
-          <h2 id="profissionais-title">Profissionais preparados para acolher, avaliar e acompanhar</h2>
+          <h2 id="profissionais-title"><?php neuroaprender_text( 'na_team_title', 'Profissionais preparados para acolher, avaliar e acompanhar' ); ?></h2>
           <p>
-            Nossa equipe atua com responsabilidade, ética e cuidado em cada etapa do atendimento.
+            <?php neuroaprender_rich_text( 'na_team_text', 'Nossa equipe atua com responsabilidade, ética e cuidado em cada etapa do atendimento.' ); ?>
           </p>
         </div>
         <div class="gallery-shell">
@@ -414,7 +414,7 @@ get_header();
           </button>
         </div>
         <div class="section-actions">
-          <a class="button button-primary button-large" href="https://wa.me/559691690204" target="_blank" rel="noopener">
+          <a class="button button-primary button-large" href="<?php echo esc_url( $na_whatsapp_url ); ?>" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.32 1.77.6 2.61a2 2 0 0 1-.45 2.11L8 9.7a16 16 0 0 0 6.3 6.3l1.26-1.26a2 2 0 0 1 2.11-.45c.84.28 1.71.48 2.61.6A2 2 0 0 1 22 16.92z"></path>
             </svg>
@@ -430,23 +430,23 @@ get_header();
         </div>
         <div class="contact-grid">
           <div class="contact-info">
-            <a href="https://wa.me/559691690204" target="_blank" rel="noopener">
+            <a href="<?php echo esc_url( $na_whatsapp_url ); ?>" target="_blank" rel="noopener">
               <span>WhatsApp</span>
-              +55 96 9169-0204
+              <?php echo esc_html( $na_whatsapp_number ); ?>
             </a>
-            <a href="https://www.instagram.com/clinicaescolaneuroaprender" target="_blank" rel="noopener">
+            <a href="<?php echo esc_url( $na_instagram_url ); ?>" target="_blank" rel="noopener">
               <span>Instagram</span>
-              @clinicaescolaneuroaprender
+              <?php echo esc_html( $na_instagram_label ); ?>
             </a>
             <div>
               <span>Endereço</span>
-              Av. Quinze de Julho, 1039 - Buritizal, Macapá - AP, 68904-720, Brasil
+              <?php echo esc_html( $na_address ); ?>
             </div>
             <div>
               <span>Horário de atendimento</span>
-              08:00 às 12:00 e 14:00 às 18:00
+              <?php echo esc_html( $na_hours ); ?>
             </div>
-            <a class="contact-cta" href="https://wa.me/559691690204" target="_blank" rel="noopener">
+            <a class="contact-cta" href="<?php echo esc_url( $na_whatsapp_url ); ?>" target="_blank" rel="noopener">
               <span>Agendamento</span>
               Agendar avaliação pelo WhatsApp
             </a>
@@ -456,13 +456,13 @@ get_header();
             title="Mapa da Clínica Escola NeuroAprender"
            
             referrerpolicy="no-referrer-when-downgrade"
-            src="https://www.google.com/maps?q=Av.%20Quinze%20de%20Julho%2C%201039%20-%20Buritizal%2C%20Macap%C3%A1%20-%20AP%2C%2068904-720%2C%20Brasil&output=embed">
+            src="<?php echo esc_url( $na_maps_url ); ?>">
           </iframe>
         </div>
       </section>
     </main>
 
-    <a class="floating-whatsapp" href="https://wa.me/559691690204" target="_blank" rel="noopener" aria-label="Agendar pelo WhatsApp">
+    <a class="floating-whatsapp" href="<?php echo esc_url( $na_whatsapp_url ); ?>" target="_blank" rel="noopener" aria-label="Agendar pelo WhatsApp">
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path>
         <path d="M8 9h8"></path>
