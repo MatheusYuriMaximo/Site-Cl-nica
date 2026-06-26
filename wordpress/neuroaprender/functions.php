@@ -147,6 +147,197 @@ function neuroaprender_maps_url(): string {
 	return 'https://www.google.com/maps?q=' . rawurlencode( $address ) . '&output=embed';
 }
 
+function neuroaprender_ai_enabled(): bool {
+	return '0' !== (string) neuroaprender_field( 'na_ai_enabled', '1' );
+}
+
+function neuroaprender_openai_api_key(): string {
+	if ( defined( 'NEUROAPRENDER_OPENAI_API_KEY' ) && NEUROAPRENDER_OPENAI_API_KEY ) {
+		return (string) NEUROAPRENDER_OPENAI_API_KEY;
+	}
+
+	$key = getenv( 'OPENAI_API_KEY' );
+
+	return $key ? (string) $key : '';
+}
+
+function neuroaprender_ai_model(): string {
+	$model = (string) neuroaprender_field( 'na_ai_model', '' );
+
+	return '' !== $model ? $model : 'gpt-4.1-mini';
+}
+
+function neuroaprender_ai_system_prompt(): string {
+	$default_prompt = 'Você é o assistente virtual da Clínica Escola NeuroAprender. Responda em português do Brasil com tom acolhedor, claro e objetivo. Ajude com dúvidas sobre serviços, avaliações, pacotes, horários, endereço, Instagram, WhatsApp e agendamento. Não dê diagnóstico, não prescreva tratamento e não substitua avaliação profissional. Quando a pergunta envolver sintomas, desenvolvimento, saúde, comportamento, aprendizagem ou urgência, oriente a família a agendar avaliação ou procurar atendimento profissional adequado. Em urgência médica, oriente procurar serviço de emergência. Sempre que útil, ofereça o WhatsApp para agendamento.';
+	$prompt         = (string) neuroaprender_field( 'na_ai_system_prompt', $default_prompt );
+	$knowledge      = (string) neuroaprender_field( 'na_ai_knowledge', '' );
+	$contact        = sprintf(
+		"Dados atuais da clínica:\nWhatsApp: %s\nInstagram: %s\nEndereço: %s\nHorário: %s\nLink de agendamento: %s",
+		(string) neuroaprender_field( 'na_whatsapp_number', '+55 96 9169-0204' ),
+		(string) neuroaprender_field( 'na_instagram_label', '@clinicaescolaneuroaprender' ),
+		(string) neuroaprender_field( 'na_address', 'Av. Quinze de Julho, 1039 - Buritizal, Macapá - AP, 68904-720, Brasil' ),
+		(string) neuroaprender_field( 'na_hours', '08:00 às 12:00 e 14:00 às 18:00' ),
+		neuroaprender_whatsapp_url()
+	);
+
+	return trim( $prompt . "\n\n" . $contact . ( '' !== $knowledge ? "\n\nBase de conhecimento autorizada:\n" . $knowledge : '' ) );
+}
+
+function neuroaprender_extract_response_text( array $body ): string {
+	if ( ! empty( $body['output_text'] ) && is_string( $body['output_text'] ) ) {
+		return $body['output_text'];
+	}
+
+	if ( empty( $body['output'] ) || ! is_array( $body['output'] ) ) {
+		return '';
+	}
+
+	$text = '';
+
+	foreach ( $body['output'] as $item ) {
+		if ( empty( $item['content'] ) || ! is_array( $item['content'] ) ) {
+			continue;
+		}
+
+		foreach ( $item['content'] as $content ) {
+			if ( ! empty( $content['text'] ) && is_string( $content['text'] ) ) {
+				$text .= ( '' === $text ? '' : "\n" ) . $content['text'];
+			}
+		}
+	}
+
+	return $text;
+}
+
+function neuroaprender_limit_text( string $text, int $limit ): string {
+	if ( function_exists( 'mb_substr' ) ) {
+		return mb_substr( $text, 0, $limit );
+	}
+
+	return substr( $text, 0, $limit );
+}
+
+function neuroaprender_chat_rate_limited(): bool {
+	$ip  = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : 'unknown';
+	$key = 'na_ai_chat_' . md5( $ip );
+	$hits = (int) get_transient( $key );
+
+	if ( $hits >= 20 ) {
+		return true;
+	}
+
+	set_transient( $key, $hits + 1, MINUTE_IN_SECONDS );
+
+	return false;
+}
+
+function neuroaprender_rest_chat( WP_REST_Request $request ): WP_REST_Response {
+	if ( ! neuroaprender_ai_enabled() ) {
+		return new WP_REST_Response( array( 'message' => 'O assistente virtual está temporariamente desativado.' ), 403 );
+	}
+
+	if ( neuroaprender_chat_rate_limited() ) {
+		return new WP_REST_Response( array( 'message' => 'Muitas mensagens em pouco tempo. Tente novamente em instantes.' ), 429 );
+	}
+
+	$api_key = neuroaprender_openai_api_key();
+
+	if ( '' === $api_key ) {
+		return new WP_REST_Response( array( 'message' => 'O assistente ainda não foi configurado pela clínica.' ), 503 );
+	}
+
+	$message = sanitize_textarea_field( (string) $request->get_param( 'message' ) );
+	$message = trim( neuroaprender_limit_text( $message, 1200 ) );
+
+	if ( '' === $message ) {
+		return new WP_REST_Response( array( 'message' => 'Digite uma pergunta para o assistente.' ), 400 );
+	}
+
+	$history = $request->get_param( 'history' );
+	$input   = array(
+		array(
+			'role'    => 'system',
+			'content' => neuroaprender_ai_system_prompt(),
+		),
+	);
+
+	if ( is_array( $history ) ) {
+		$history = array_slice( $history, -6 );
+
+		foreach ( $history as $entry ) {
+			if ( ! is_array( $entry ) || empty( $entry['role'] ) || empty( $entry['content'] ) ) {
+				continue;
+			}
+
+			$role = 'assistant' === $entry['role'] ? 'assistant' : 'user';
+			$input[] = array(
+				'role'    => $role,
+				'content' => neuroaprender_limit_text( sanitize_textarea_field( (string) $entry['content'] ), 900 ),
+			);
+		}
+	}
+
+	$input[] = array(
+		'role'    => 'user',
+		'content' => $message,
+	);
+
+	$response = wp_remote_post(
+		'https://api.openai.com/v1/responses',
+		array(
+			'timeout' => 30,
+			'headers' => array(
+				'Authorization' => 'Bearer ' . $api_key,
+				'Content-Type'  => 'application/json',
+			),
+			'body'    => wp_json_encode(
+				array(
+					'model'             => neuroaprender_ai_model(),
+					'input'             => $input,
+					'max_output_tokens' => 450,
+				)
+			),
+		)
+	);
+
+	if ( is_wp_error( $response ) ) {
+		return new WP_REST_Response( array( 'message' => 'Não foi possível conectar ao assistente agora. Tente novamente em instantes.' ), 502 );
+	}
+
+	$status = (int) wp_remote_retrieve_response_code( $response );
+	$body   = json_decode( (string) wp_remote_retrieve_body( $response ), true );
+
+	if ( $status < 200 || $status >= 300 || ! is_array( $body ) ) {
+		return new WP_REST_Response( array( 'message' => 'O assistente não conseguiu responder agora. Tente novamente em instantes.' ), 502 );
+	}
+
+	$text = trim( neuroaprender_extract_response_text( $body ) );
+
+	if ( '' === $text ) {
+		$text = 'Não consegui montar uma resposta agora. Você pode falar com a equipe pelo WhatsApp para receber orientação.';
+	}
+
+	return new WP_REST_Response(
+		array(
+			'message' => wp_kses_post( $text ),
+		),
+		200
+	);
+}
+
+function neuroaprender_register_rest_routes(): void {
+	register_rest_route(
+		'neuroaprender/v1',
+		'/chat',
+		array(
+			'methods'             => 'POST',
+			'callback'            => 'neuroaprender_rest_chat',
+			'permission_callback' => '__return_true',
+		)
+	);
+}
+add_action( 'rest_api_init', 'neuroaprender_register_rest_routes' );
+
 function neuroaprender_admin_notice_acf(): void {
 	if ( function_exists( 'acf_add_local_field_group' ) ) {
 		if ( 0 === (int) get_option( 'page_on_front' ) ) {
@@ -424,6 +615,83 @@ function neuroaprender_register_acf_fields(): void {
 					'name'          => 'na_cta_button',
 					'type'          => 'text',
 					'default_value' => 'Falar com a NeuroAprender',
+				),
+				array(
+					'key'       => 'field_na_tab_ai',
+					'label'     => 'Bot IA',
+					'name'      => '',
+					'type'      => 'tab',
+					'placement' => 'top',
+				),
+				array(
+					'key'           => 'field_na_ai_enabled',
+					'label'         => 'Ativar assistente virtual',
+					'name'          => 'na_ai_enabled',
+					'type'          => 'true_false',
+					'default_value' => 1,
+					'ui'            => 1,
+				),
+				array(
+					'key'           => 'field_na_ai_title',
+					'label'         => 'Título do chat',
+					'name'          => 'na_ai_title',
+					'type'          => 'text',
+					'default_value' => 'Assistente NeuroAprender',
+				),
+				array(
+					'key'           => 'field_na_ai_intro',
+					'label'         => 'Mensagem inicial',
+					'name'          => 'na_ai_intro',
+					'type'          => 'textarea',
+					'rows'          => 3,
+					'default_value' => 'Olá! Posso tirar dúvidas sobre serviços, horários, localização e agendamento. Para avaliação clínica, nossa equipe continua sendo o melhor caminho.',
+				),
+				array(
+					'key'           => 'field_na_ai_placeholder',
+					'label'         => 'Texto do campo de mensagem',
+					'name'          => 'na_ai_placeholder',
+					'type'          => 'text',
+					'default_value' => 'Digite sua dúvida...',
+				),
+				array(
+					'key'           => 'field_na_ai_button_label',
+					'label'         => 'Texto do botão flutuante',
+					'name'          => 'na_ai_button_label',
+					'type'          => 'text',
+					'default_value' => 'Tirar dúvidas com IA',
+				),
+				array(
+					'key'           => 'field_na_ai_disclaimer',
+					'label'         => 'Aviso do chat',
+					'name'          => 'na_ai_disclaimer',
+					'type'          => 'textarea',
+					'rows'          => 2,
+					'default_value' => 'Este assistente não realiza diagnóstico e não substitui atendimento profissional.',
+				),
+				array(
+					'key'           => 'field_na_ai_model',
+					'label'         => 'Modelo OpenAI',
+					'name'          => 'na_ai_model',
+					'type'          => 'text',
+					'default_value' => 'gpt-4.1-mini',
+					'instructions'  => 'Altere apenas se souber qual modelo está disponível na conta OpenAI.',
+				),
+				array(
+					'key'           => 'field_na_ai_system_prompt',
+					'label'         => 'Instruções do assistente',
+					'name'          => 'na_ai_system_prompt',
+					'type'          => 'textarea',
+					'rows'          => 6,
+					'default_value' => 'Você é o assistente virtual da Clínica Escola NeuroAprender. Responda em português do Brasil com tom acolhedor, claro e objetivo. Ajude com dúvidas sobre serviços, avaliações, pacotes, horários, endereço, Instagram, WhatsApp e agendamento. Não dê diagnóstico, não prescreva tratamento e não substitua avaliação profissional. Quando a pergunta envolver sintomas, desenvolvimento, saúde, comportamento, aprendizagem ou urgência, oriente a família a agendar avaliação ou procurar atendimento profissional adequado. Em urgência médica, oriente procurar serviço de emergência. Sempre que útil, ofereça o WhatsApp para agendamento.',
+				),
+				array(
+					'key'           => 'field_na_ai_knowledge',
+					'label'         => 'Base de conhecimento adicional',
+					'name'          => 'na_ai_knowledge',
+					'type'          => 'textarea',
+					'rows'          => 8,
+					'instructions'  => 'Use este campo para perguntas frequentes, regras de atendimento, informações sobre pacotes e respostas autorizadas pela clínica.',
+					'default_value' => '',
 				),
 			),
 			'location' => array(

@@ -104,6 +104,86 @@
       if (event.key === "ArrowLeft") showPhoto(activePhotoIndex - 1);
       if (event.key === "ArrowRight") showPhoto(activePhotoIndex + 1);
     });
+
+    const chat = document.querySelector(".ai-chat");
+    const chatToggle = chat?.querySelector(".ai-chat-toggle");
+    const chatPanel = chat?.querySelector(".ai-chat-panel");
+    const chatClose = chat?.querySelector(".ai-chat-close");
+    const chatForm = chat?.querySelector(".ai-chat-form");
+    const chatInput = chat?.querySelector("textarea");
+    const chatMessages = chat?.querySelector(".ai-chat-messages");
+    const chatConfig = window.NeuroAprenderChat || {};
+    const chatHistory = [];
+
+    const addChatMessage = (content, type = "bot") => {
+      if (!chatMessages) return null;
+
+      const message = document.createElement("div");
+      message.className = `ai-message ai-message-${type}`;
+      message.textContent = content;
+      chatMessages.appendChild(message);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      return message;
+    };
+
+    const setChatOpen = (isOpen) => {
+      if (!chatPanel || !chatToggle) return;
+
+      chatPanel.hidden = !isOpen;
+      chatToggle.setAttribute("aria-expanded", String(isOpen));
+      chat?.classList.toggle("is-open", isOpen);
+
+      if (isOpen) {
+        setTimeout(() => chatInput?.focus(), 50);
+      }
+    };
+
+    chatToggle?.addEventListener("click", () => {
+      setChatOpen(Boolean(chatPanel?.hidden));
+    });
+
+    chatClose?.addEventListener("click", () => setChatOpen(false));
+
+    chatForm?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (!chatInput || !chatConfig.endpoint) return;
+
+      const text = chatInput.value.trim();
+      if (!text) return;
+
+      chatInput.value = "";
+      chatInput.disabled = true;
+      addChatMessage(text, "user");
+      const pending = addChatMessage("Digitando...", "bot");
+
+      try {
+        const response = await fetch(chatConfig.endpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            message: text,
+            history: chatHistory.slice(-6),
+          }),
+        });
+
+        const data = await response.json().catch(() => ({}));
+        const answer = data.message || chatConfig.errorMessage || "Não consegui responder agora.";
+
+        if (pending) pending.textContent = answer;
+        chatHistory.push({ role: "user", content: text });
+        chatHistory.push({ role: "assistant", content: answer });
+      } catch (error) {
+        if (pending) {
+          pending.textContent = chatConfig.errorMessage || "Não consegui responder agora. Você pode chamar a equipe pelo WhatsApp.";
+        }
+      } finally {
+        chatInput.disabled = false;
+        chatInput.focus();
+      }
+    });
   };
 
   if (document.readyState === "loading") {

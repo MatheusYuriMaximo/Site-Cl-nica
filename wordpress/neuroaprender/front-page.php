@@ -471,6 +471,50 @@ $na_mascot_url         = neuroaprender_image_uri( 'na_mascot_image', 'assets/mas
       WhatsApp
     </a>
 
+    <?php if ( neuroaprender_ai_enabled() ) : ?>
+      <section class="ai-chat" aria-label="Assistente virtual da NeuroAprender">
+        <button class="ai-chat-toggle" type="button" aria-expanded="false" aria-controls="ai-chat-panel">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path>
+            <path d="M8 9h8"></path>
+            <path d="M8 13h5"></path>
+          </svg>
+          <?php neuroaprender_text( 'na_ai_button_label', 'Tirar dúvidas com IA' ); ?>
+        </button>
+        <div class="ai-chat-panel" id="ai-chat-panel" hidden>
+          <div class="ai-chat-header">
+            <div>
+              <strong><?php neuroaprender_text( 'na_ai_title', 'Assistente NeuroAprender' ); ?></strong>
+              <span>Resposta automática</span>
+            </div>
+            <button class="ai-chat-close" type="button" aria-label="Fechar assistente">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M18 6 6 18"></path>
+                <path d="m6 6 12 12"></path>
+              </svg>
+            </button>
+          </div>
+          <div class="ai-chat-messages" aria-live="polite">
+            <div class="ai-message ai-message-bot">
+              <?php neuroaprender_rich_text( 'na_ai_intro', 'Olá! Posso tirar dúvidas sobre serviços, horários, localização e agendamento. Para avaliação clínica, nossa equipe continua sendo o melhor caminho.' ); ?>
+            </div>
+          </div>
+          <form class="ai-chat-form">
+            <label class="sr-only" for="ai-chat-input">Mensagem para o assistente</label>
+            <textarea id="ai-chat-input" name="message" rows="2" maxlength="1200" placeholder="<?php echo esc_attr( (string) neuroaprender_field( 'na_ai_placeholder', 'Digite sua dúvida...' ) ); ?>"></textarea>
+            <button type="submit" aria-label="Enviar pergunta">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M22 2 11 13"></path>
+                <path d="m22 2-7 20-4-9-9-4 20-7z"></path>
+              </svg>
+            </button>
+          </form>
+          <p class="ai-chat-disclaimer"><?php neuroaprender_text( 'na_ai_disclaimer', 'Este assistente não realiza diagnóstico e não substitui atendimento profissional.' ); ?></p>
+          <a class="ai-chat-whatsapp" href="<?php echo esc_url( $na_whatsapp_url ); ?>" target="_blank" rel="noopener">Agendar pelo WhatsApp</a>
+        </div>
+      </section>
+    <?php endif; ?>
+
     <div class="lightbox" id="photo-lightbox" hidden aria-modal="true" role="dialog" aria-label="Visualização da foto">
       <button class="lightbox-close" type="button" aria-label="Fechar foto">
         <svg viewBox="0 0 24 24" aria-hidden="true">

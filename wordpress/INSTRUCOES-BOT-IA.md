@@ -1,0 +1,61 @@
+# Bot IA NeuroAprender
+
+Esta versão do tema inclui um assistente virtual simples e seguro para dúvidas iniciais dos visitantes.
+
+## O Que O Bot Faz
+
+- Responde dúvidas sobre serviços, horários, endereço, Instagram, WhatsApp e agendamento.
+- Usa as informações editáveis da landing page.
+- Encaminha dúvidas clínicas para avaliação profissional.
+- Não realiza diagnóstico.
+- Não prescreve tratamento.
+- Não substitui atendimento profissional.
+
+## Como Configurar A Chave Da OpenAI
+
+A chave da OpenAI não deve ficar no HTML, JavaScript ou painel público.
+
+No servidor, edite o arquivo `wp-config.php` e adicione antes da linha `/* That's all, stop editing! */`:
+
+```php
+define( 'NEUROAPRENDER_OPENAI_API_KEY', 'sua-chave-aqui' );
+```
+
+Alternativa: configurar a variável de ambiente:
+
+```text
+OPENAI_API_KEY
+```
+
+O tema tenta primeiro `NEUROAPRENDER_OPENAI_API_KEY` e depois `OPENAI_API_KEY`.
+
+## Campos Editáveis
+
+Com o plugin Advanced Custom Fields ativo, edite a página `Início` e abra a aba `Bot IA`.
+
+Campos disponíveis:
+
+- Ativar assistente virtual
+- Título do chat
+- Mensagem inicial
+- Texto do campo de mensagem
+- Texto do botão flutuante
+- Aviso do chat
+- Modelo OpenAI
+- Instruções do assistente
+- Base de conhecimento adicional
+
+## Endpoint Técnico
+
+O widget chama este endpoint interno do WordPress:
+
+```text
+/wp-json/neuroaprender/v1/chat
+```
+
+Esse endpoint é quem chama a OpenAI. A chave nunca vai para o navegador do visitante.
+
+## Limite Básico
+
+O tema aplica um limite simples de 20 mensagens por minuto por IP para reduzir abuso.
+
