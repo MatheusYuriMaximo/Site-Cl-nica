@@ -59,3 +59,14 @@ function neuroaprender_enqueue_assets(): void {
 	);
 }
 add_action( 'wp_enqueue_scripts', 'neuroaprender_enqueue_assets' );
+
+function neuroaprender_site_icon_tags(): void {
+	$icon_uri = neuroaprender_asset_uri( 'assets/site-icon-neuroaprender.png' );
+	?>
+	<link rel="icon" href="<?php echo esc_url( $icon_uri ); ?>" sizes="512x512" type="image/png">
+	<link rel="apple-touch-icon" href="<?php echo esc_url( $icon_uri ); ?>">
+	<?php
+}
+add_action( 'wp_head', 'neuroaprender_site_icon_tags', 1 );
+add_action( 'admin_head', 'neuroaprender_site_icon_tags', 1 );
+add_action( 'login_head', 'neuroaprender_site_icon_tags', 1 );
