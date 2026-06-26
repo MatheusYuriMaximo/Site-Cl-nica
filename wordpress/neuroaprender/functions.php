@@ -9,6 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+require_once get_template_directory() . '/inc/elementor-seed.php';
+
 function neuroaprender_asset_uri( string $path ): string {
 	$path = ltrim( $path, '/' );
 
@@ -525,6 +527,14 @@ function neuroaprender_render_landing_admin_page(): void {
 		<h1>Landing Page NeuroAprender</h1>
 		<p>Use esta tela como atalho para editar a pagina inicial publicada da clinica. Para edicao visual completa, use Elementor na pagina inicial ativa.</p>
 
+		<?php if ( isset( $_GET['na_elementor_seed'] ) && 'success' === $_GET['na_elementor_seed'] ) : ?>
+			<div class="notice notice-success inline"><p><strong>Landing Elementor criada.</strong> A pagina inicial agora contem uma versao editavel da landing.</p></div>
+		<?php elseif ( isset( $_GET['na_elementor_seed'] ) && 'missing_elementor' === $_GET['na_elementor_seed'] ) : ?>
+			<div class="notice notice-error inline"><p><strong>Elementor nao encontrado.</strong> Instale e ative o plugin Elementor antes de gerar a versao editavel.</p></div>
+		<?php elseif ( isset( $_GET['na_elementor_seed'] ) && 'error' === $_GET['na_elementor_seed'] ) : ?>
+			<div class="notice notice-error inline"><p><strong>Nao foi possivel gerar a landing Elementor.</strong></p></div>
+		<?php endif; ?>
+
 		<?php if ( $page_id > 0 ) : ?>
 			<div class="notice notice-success inline">
 				<p><strong>Pagina inicial ativa:</strong> <?php echo esc_html( get_the_title( $page_id ) ); ?></p>
@@ -535,6 +545,15 @@ function neuroaprender_render_landing_admin_page(): void {
 			</p>
 			<p>Se a pagina tiver conteudo criado no Elementor ou no editor de blocos, esse conteudo visual sera exibido no site. Se ela estiver vazia, o tema mostra a landing fixa atual como fallback.</p>
 			<p>Os campos <strong>NeuroAprender - Conteudo da Landing Page</strong> continuam disponiveis como edicao simples do fallback.</p>
+			<hr>
+			<h2>Criar versao editavel no Elementor</h2>
+			<p>Este botao preenche a pagina inicial atual com uma versao Elementor da landing. Ele nao cria uma pagina nova; usa a pagina inicial existente.</p>
+			<p><strong>Atenção:</strong> se a pagina inicial ja tiver conteudo Elementor, ele sera substituido pelo modelo inicial da NeuroAprender.</p>
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+				<?php wp_nonce_field( 'neuroaprender_seed_elementor_landing' ); ?>
+				<input type="hidden" name="action" value="neuroaprender_seed_elementor_landing">
+				<button class="button button-primary" type="submit">Gerar landing editavel no Elementor</button>
+			</form>
 		<?php else : ?>
 			<div class="notice notice-warning inline">
 				<p><strong>A pagina inicial estatica ainda nao foi definida.</strong></p>
