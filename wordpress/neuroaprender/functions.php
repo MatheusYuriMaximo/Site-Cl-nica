@@ -36,7 +36,7 @@ function neuroaprender_setup(): void {
 add_action( 'after_setup_theme', 'neuroaprender_setup' );
 
 function neuroaprender_enqueue_assets(): void {
-	$css_path = neuroaprender_asset_path( 'assets/css/neuroaprender.css' );
+	$css_path = get_stylesheet_directory() . '/style.css';
 	$js_path  = neuroaprender_asset_path( 'assets/js/neuroaprender.js' );
 
 	wp_enqueue_style(
@@ -48,7 +48,7 @@ function neuroaprender_enqueue_assets(): void {
 
 	wp_enqueue_style(
 		'neuroaprender-main',
-		neuroaprender_asset_uri( 'assets/css/neuroaprender.css' ),
+		get_stylesheet_uri(),
 		array( 'neuroaprender-fonts' ),
 		file_exists( $css_path ) ? (string) filemtime( $css_path ) : '1.0.0'
 	);
@@ -62,4 +62,3 @@ function neuroaprender_enqueue_assets(): void {
 	);
 }
 add_action( 'wp_enqueue_scripts', 'neuroaprender_enqueue_assets' );
-
