@@ -178,8 +178,8 @@ $na_mascot_url         = neuroaprender_image_uri( 'na_mascot_image', 'assets/mas
             <figcaption>Administração</figcaption>
           </figure>
           <figure class="clinic-photo">
-            <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/clinica/cozinha.webp' ) ); ?>" alt="Área de apoio da clínica">
-            <figcaption>Área de apoio</figcaption>
+            <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/clinica/cozinha.webp' ) ); ?>" alt="Cozinha Terapêutica da clínica">
+            <figcaption>Cozinha Terapêutica</figcaption>
           </figure>
         </div>
           <button class="gallery-control gallery-next" type="button" aria-label="Ver próximas fotos">

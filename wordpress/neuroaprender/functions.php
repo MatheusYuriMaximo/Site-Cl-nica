@@ -366,10 +366,85 @@ function neuroaprender_register_rest_routes(): void {
 }
 add_action( 'rest_api_init', 'neuroaprender_register_rest_routes' );
 
+function neuroaprender_landing_page_id(): int {
+	return (int) get_option( 'page_on_front' );
+}
+
+function neuroaprender_landing_edit_url(): string {
+	$page_id = neuroaprender_landing_page_id();
+
+	if ( $page_id > 0 ) {
+		return get_edit_post_link( $page_id, 'raw' );
+	}
+
+	return admin_url( 'options-reading.php' );
+}
+
+function neuroaprender_admin_menu(): void {
+	add_menu_page(
+		'NeuroAprender',
+		'NeuroAprender',
+		'edit_pages',
+		'neuroaprender-landing',
+		'neuroaprender_render_landing_admin_page',
+		'dashicons-welcome-learn-more',
+		25
+	);
+}
+add_action( 'admin_menu', 'neuroaprender_admin_menu' );
+
+function neuroaprender_render_landing_admin_page(): void {
+	$page_id = neuroaprender_landing_page_id();
+	?>
+	<div class="wrap">
+		<h1>Landing Page NeuroAprender</h1>
+		<p>Use esta tela como atalho para editar a pagina inicial publicada da clinica.</p>
+
+		<?php if ( $page_id > 0 ) : ?>
+			<div class="notice notice-success inline">
+				<p><strong>Pagina inicial ativa:</strong> <?php echo esc_html( get_the_title( $page_id ) ); ?></p>
+			</div>
+			<p>
+				<a class="button button-primary button-hero" href="<?php echo esc_url( get_edit_post_link( $page_id, 'raw' ) ); ?>">Editar conteudo da landing</a>
+				<a class="button button-hero" href="<?php echo esc_url( home_url( '/' ) ); ?>" target="_blank" rel="noopener">Ver site publicado</a>
+			</p>
+			<p>Na tela de edicao, use os campos <strong>NeuroAprender - Conteudo da Landing Page</strong>. Eles controlam textos, contato, hero, secoes, bot IA e demais informacoes da pagina publicada.</p>
+		<?php else : ?>
+			<div class="notice notice-warning inline">
+				<p><strong>A pagina inicial estatica ainda nao foi definida.</strong></p>
+			</div>
+			<p>Para editar a landing por GUI nesta pagina especifica, crie ou escolha uma pagina do WordPress e defina em <strong>Configuracoes &gt; Leitura &gt; Uma pagina estatica</strong>.</p>
+			<p>
+				<a class="button button-primary" href="<?php echo esc_url( admin_url( 'options-reading.php' ) ); ?>">Configurar pagina inicial</a>
+				<a class="button" href="<?php echo esc_url( admin_url( 'post-new.php?post_type=page' ) ); ?>">Criar pagina</a>
+			</p>
+		<?php endif; ?>
+	</div>
+	<?php
+}
+
+function neuroaprender_front_page_editor_notice( WP_Post $post ): void {
+	if ( 'page' !== $post->post_type || (int) $post->ID !== neuroaprender_landing_page_id() ) {
+		return;
+	}
+
+	echo '<div class="notice notice-info inline"><p><strong>Esta e a landing page publicada da NeuroAprender.</strong> Edite os campos abaixo em <strong>NeuroAprender - Conteudo da Landing Page</strong>; o conteudo visual do site e gerado por esses campos, nao pelo bloco de texto comum.</p></div>';
+}
+add_action( 'edit_form_after_title', 'neuroaprender_front_page_editor_notice' );
+
+function neuroaprender_page_states( array $post_states, WP_Post $post ): array {
+	if ( 'page' === $post->post_type && (int) $post->ID === neuroaprender_landing_page_id() ) {
+		$post_states['neuroaprender_landing'] = 'Landing NeuroAprender';
+	}
+
+	return $post_states;
+}
+add_filter( 'display_post_states', 'neuroaprender_page_states', 10, 2 );
+
 function neuroaprender_admin_notice_acf(): void {
 	if ( function_exists( 'acf_add_local_field_group' ) ) {
 		if ( 0 === (int) get_option( 'page_on_front' ) ) {
-			echo '<div class="notice notice-info"><p><strong>NeuroAprender:</strong> para editar a landing por campos, crie uma página chamada "Início" e defina em Configurações > Leitura > Uma página estática.</p></div>';
+			echo '<div class="notice notice-info"><p><strong>NeuroAprender:</strong> para editar a landing por GUI nesta pagina especifica, abra o menu <strong>NeuroAprender</strong> e defina uma pagina inicial estatica.</p></div>';
 		}
 
 		return;

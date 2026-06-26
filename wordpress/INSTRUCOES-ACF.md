@@ -1,35 +1,35 @@
-# Edição Visual Com ACF
+# Edicao Visual Com ACF
 
-Esta versão do tema NeuroAprender permite editar os principais textos e contatos da landing page pelo painel do WordPress usando o plugin **Advanced Custom Fields**.
+Esta versao do tema NeuroAprender permite editar os principais textos e contatos da landing page pelo painel do WordPress usando o plugin **Advanced Custom Fields**.
 
-## Passos no WordPress
+## Caminho Recomendado
 
-1. Instale o plugin `Advanced Custom Fields`.
-2. Ative o plugin.
-3. Vá em `Páginas > Adicionar nova`.
-4. Crie uma página chamada `Início`.
-5. Vá em `Configurações > Leitura`.
-6. Em `Sua página inicial exibe`, selecione `Uma página estática`.
-7. Em `Página inicial`, selecione `Início`.
-8. Salve.
-9. Volte em `Páginas > Início > Editar`.
-10. Edite os campos do bloco `NeuroAprender - Conteúdo da Landing Page`.
+1. Instale e ative o plugin `Advanced Custom Fields`.
+2. No painel do WordPress, abra o menu `NeuroAprender`.
+3. Se a pagina inicial ainda nao estiver definida, clique em `Configurar pagina inicial`.
+4. Em `Sua pagina inicial exibe`, selecione `Uma pagina estatica`.
+5. Em `Pagina inicial`, selecione a pagina que sera a landing page da clinica.
+6. Volte ao menu `NeuroAprender`.
+7. Clique em `Editar conteudo da landing`.
+8. Edite os campos do bloco `NeuroAprender - Conteudo da Landing Page`.
 
-## Campos Editáveis Nesta Primeira Versão
+Essa pagina pode parecer vazia no editor de blocos do WordPress porque o visual publicado e gerado pelo tema. O conteudo real da landing fica nos campos organizados abaixo do titulo.
+
+## Campos Editaveis
 
 - WhatsApp
 - Instagram
-- Endereço
-- Horário
+- Endereco
+- Horario
 - Mapa
 - Textos do hero
 - Mascote
-- Textos da seção Sobre
-- Títulos e textos das principais seções
+- Textos da secao Sobre
+- Titulos e textos das principais secoes
 - CTA final
-- Título e texto da equipe
+- Titulo e texto da equipe
+- Configuracoes do bot IA
 
-## Observação
+## Observacao
 
-Se algum campo ficar vazio, o tema usa o conteúdo padrão atual para evitar que o site quebre.
-
+Se algum campo ficar vazio, o tema usa o conteudo padrao atual para evitar que o site quebre.
