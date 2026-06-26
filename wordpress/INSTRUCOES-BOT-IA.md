@@ -1,19 +1,20 @@
 # Bot IA NeuroAprender
 
-Esta versão do tema inclui um assistente virtual simples e seguro para dúvidas iniciais dos visitantes.
+Esta versao do tema inclui um assistente virtual para duvidas iniciais dos visitantes.
 
 ## O Que O Bot Faz
 
-- Responde dúvidas sobre serviços, horários, endereço, Instagram, WhatsApp e agendamento.
-- Usa as informações editáveis da landing page.
-- Encaminha dúvidas clínicas para avaliação profissional.
-- Não realiza diagnóstico.
-- Não prescreve tratamento.
-- Não substitui atendimento profissional.
+- Responde duvidas sobre servicos, horarios, endereco, Instagram, WhatsApp e agendamento.
+- Usa as informacoes editaveis da landing page.
+- Usa a tabela de precos e regras comerciais cadastradas na aba `Bot IA`.
+- Encaminha duvidas clinicas para avaliacao profissional.
+- Nao realiza diagnostico.
+- Nao prescreve tratamento.
+- Nao substitui atendimento profissional.
 
 ## Como Configurar A Chave Da OpenAI
 
-A chave da OpenAI não deve ficar no HTML, JavaScript ou painel público.
+A chave da OpenAI nao deve ficar no HTML, JavaScript ou painel publico.
 
 No servidor, edite o arquivo `wp-config.php` e adicione antes da linha `/* That's all, stop editing! */`:
 
@@ -21,7 +22,7 @@ No servidor, edite o arquivo `wp-config.php` e adicione antes da linha `/* That'
 define( 'NEUROAPRENDER_OPENAI_API_KEY', 'sua-chave-aqui' );
 ```
 
-Alternativa: configurar a variável de ambiente:
+Alternativa: configurar a variavel de ambiente:
 
 ```text
 OPENAI_API_KEY
@@ -29,23 +30,38 @@ OPENAI_API_KEY
 
 O tema tenta primeiro `NEUROAPRENDER_OPENAI_API_KEY` e depois `OPENAI_API_KEY`.
 
-## Campos Editáveis
+## Como Editar O Prompt E A Tabela De Precos
 
-Com o plugin Advanced Custom Fields ativo, edite a página `Início` e abra a aba `Bot IA`.
+No WordPress:
 
-Campos disponíveis:
+1. Abra `Paginas`.
+2. Edite a pagina definida como pagina inicial da clinica.
+3. Abra o bloco `NeuroAprender - Conteudo da Landing Page`.
+4. Clique na aba `Bot IA`.
+5. Edite os campos:
+   - `Instrucoes do assistente`
+   - `Tabela de precos e regras comerciais`
+   - `Base de conhecimento adicional`
+6. Clique em `Atualizar`.
+
+O campo `Tabela de precos e regras comerciais` e enviado ao bot como contexto da API. Edite ali valores, duracoes, pacotes e regras de desconto.
+
+Regra recomendada: manter valor cheio como padrao e informar o valor com 20% apenas quando o cliente pedir desconto, promocao, condicao especial ou negociacao.
+
+## Campos Editaveis Do Bot
 
 - Ativar assistente virtual
-- Título do chat
+- Titulo do chat
 - Mensagem inicial
 - Texto do campo de mensagem
-- Texto do botão flutuante
+- Texto do botao flutuante
 - Aviso do chat
 - Modelo OpenAI
-- Instruções do assistente
+- Instrucoes do assistente
+- Tabela de precos e regras comerciais
 - Base de conhecimento adicional
 
-## Endpoint Técnico
+## Endpoint Tecnico
 
 O widget chama este endpoint interno do WordPress:
 
@@ -53,17 +69,15 @@ O widget chama este endpoint interno do WordPress:
 /wp-json/neuroaprender/v1/chat
 ```
 
-Esse endpoint é quem chama a OpenAI. A chave nunca vai para o navegador do visitante.
+Esse endpoint e quem chama a OpenAI. A chave nunca vai para o navegador do visitante.
 
-## Limite Básico
+## Limite Basico
 
 O tema aplica um limite simples de 20 mensagens por minuto por IP para reduzir abuso.
 
 ## Se O Bot Nao Responder
 
-Se o widget aparecer, mas responder apenas com mensagem de erro, a chave foi lida pelo WordPress e a falha esta na chamada para a OpenAI.
-
-Depois de instalar a versao 1.2.4 do tema, teste o bot uma vez. Para o visitante, qualquer falha aparece como uma mensagem generica. O detalhe tecnico fica apenas nos logs do servidor.
+Para o visitante, qualquer falha aparece como uma mensagem generica. O detalhe tecnico fica apenas nos logs do servidor.
 
 Para ver o detalhe tecnico, confira os logs do site no CloudPanel:
 
