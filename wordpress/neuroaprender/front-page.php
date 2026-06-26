@@ -155,47 +155,16 @@ if ( neuroaprender_is_visual_builder_request() ) {
           <button class="gallery-control gallery-prev" type="button" aria-label="Ver fotos anteriores">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
           </button>
-        <div class="clinic-gallery gallery-track" aria-label="Fotos da Clínica Escola NeuroAprender">
-          <figure class="clinic-photo clinic-photo-featured">
-            <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/clinica/entrada.webp' ) ); ?>" alt="Entrada da Clínica Escola NeuroAprender">
-            <figcaption>Entrada da clínica</figcaption>
-          </figure>
-          <figure class="clinic-photo">
-            <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/clinica/frente.webp' ) ); ?>" alt="Frente da Clínica Escola NeuroAprender">
-            <figcaption>Fachada</figcaption>
-          </figure>
-          <figure class="clinic-photo">
-            <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/clinica/recepcao-2.webp' ) ); ?>" alt="Recepção da Clínica Escola NeuroAprender">
-            <figcaption>Recepção</figcaption>
-          </figure>
-          <figure class="clinic-photo">
-            <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-11.webp' ) ); ?>" alt="Recepção da Clínica Escola NeuroAprender">
-            <figcaption>Recepção</figcaption>
-          </figure>
-          <figure class="clinic-photo">
-            <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/clinica/atendimento-clinico.webp' ) ); ?>" alt="Sala de atendimento clínico">
-            <figcaption>Atendimento clínico</figcaption>
-          </figure>
-          <figure class="clinic-photo">
-            <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/clinica/fono.webp' ) ); ?>" alt="Sala de fonoaudiologia">
-            <figcaption>Fonoaudiologia</figcaption>
-          </figure>
-          <figure class="clinic-photo">
-            <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/clinica/ocupacional.webp' ) ); ?>" alt="Sala de terapia ocupacional">
-            <figcaption>Terapia ocupacional</figcaption>
-          </figure>
-          <figure class="clinic-photo">
-            <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/clinica/psicomotricista.webp' ) ); ?>" alt="Sala de psicomotricidade">
-            <figcaption>Psicomotricidade</figcaption>
-          </figure>
-          <figure class="clinic-photo">
-            <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/clinica/administracao.webp' ) ); ?>" alt="Área administrativa da clínica">
-            <figcaption>Administração</figcaption>
-          </figure>
-          <figure class="clinic-photo">
-            <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/clinica/cozinha.webp' ) ); ?>" alt="Cozinha Terapêutica da clínica">
-            <figcaption>Cozinha Terapêutica</figcaption>
-          </figure>
+        <div class="clinic-gallery gallery-track" aria-label="Fotos da Clinica Escola NeuroAprender">
+          <?php foreach ( neuroaprender_builder_items( 'space_items' ) as $space_item ) : ?>
+            <?php if ( empty( $space_item['image'] ) ) : continue; endif; ?>
+            <figure class="clinic-photo <?php echo ! empty( $space_item['featured'] ) ? 'clinic-photo-featured' : ''; ?>">
+              <img loading="lazy" decoding="async" src="<?php echo esc_url( $space_item['image'] ); ?>" alt="<?php echo esc_attr( $space_item['alt'] ?? $space_item['title'] ?? '' ); ?>">
+              <?php if ( ! empty( $space_item['title'] ) ) : ?>
+                <figcaption><?php echo esc_html( $space_item['title'] ); ?></figcaption>
+              <?php endif; ?>
+            </figure>
+          <?php endforeach; ?>
         </div>
           <button class="gallery-control gallery-next" type="button" aria-label="Ver próximas fotos">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
@@ -220,61 +189,25 @@ if ( neuroaprender_is_visual_builder_request() ) {
         </div>
 
         <div class="service-groups">
-          <article class="service-group">
-            <div class="group-label">Avaliações</div>
-            <div class="service-grid">
-              <div class="service-card">
-                <h3>Avaliação Neuropsicológica</h3>
-                <p>Investigação das funções cognitivas, emocionais e comportamentais.</p>
+          <?php foreach ( neuroaprender_builder_items( 'service_groups' ) as $service_group ) : ?>
+            <article class="service-group">
+              <?php if ( ! empty( $service_group['title'] ) ) : ?>
+                <div class="group-label"><?php echo esc_html( $service_group['title'] ); ?></div>
+              <?php endif; ?>
+              <div class="service-grid">
+                <?php foreach ( (array) ( $service_group['items'] ?? array() ) as $service_item ) : ?>
+                  <div class="service-card">
+                    <?php if ( ! empty( $service_item['title'] ) ) : ?>
+                      <h3><?php echo esc_html( $service_item['title'] ); ?></h3>
+                    <?php endif; ?>
+                    <?php if ( ! empty( $service_item['text'] ) ) : ?>
+                      <p><?php echo esc_html( $service_item['text'] ); ?></p>
+                    <?php endif; ?>
+                  </div>
+                <?php endforeach; ?>
               </div>
-              <div class="service-card">
-                <h3>Avaliação Neuropsicopedagógica</h3>
-                <p>Compreensão das dificuldades de aprendizagem e desenvolvimento escolar.</p>
-              </div>
-              <div class="service-card">
-                <h3>PIPE</h3>
-                <p>Programa de Intervenção Precoce Educacional para crianças pequenas.</p>
-              </div>
-            </div>
-          </article>
-
-          <article class="service-group">
-            <div class="group-label">Atendimentos clínicos</div>
-            <div class="service-grid">
-              <div class="service-card">
-                <h3>Psicologia</h3>
-                <p>Acolhimento emocional, comportamento, orientação familiar e desenvolvimento.</p>
-              </div>
-              <div class="service-card">
-                <h3>Neuropsicologia</h3>
-                <p>Avaliação e acompanhamento das funções cognitivas e comportamentais.</p>
-              </div>
-              <div class="service-card">
-                <h3>Fisioterapia</h3>
-                <p>Acompanhamento motor, postural e funcional.</p>
-              </div>
-              <div class="service-card">
-                <h3>Nutrição</h3>
-                <p>Orientação alimentar individualizada para saúde, desenvolvimento e rotina familiar.</p>
-              </div>
-              <div class="service-card">
-                <h3>Psicomotricidade</h3>
-                <p>Estímulo das habilidades motoras, corporais, emocionais e sociais.</p>
-              </div>
-              <div class="service-card">
-                <h3>Psicopedagogia</h3>
-                <p>Apoio no processo de aprendizagem e desenvolvimento escolar.</p>
-              </div>
-              <div class="service-card">
-                <h3>Pedagogia</h3>
-                <p>Intervenções educacionais individualizadas.</p>
-              </div>
-              <div class="service-card">
-                <h3>Clínico Geral</h3>
-                <p>Atendimento médico para acompanhamento da saúde.</p>
-              </div>
-            </div>
-          </article>
+            </article>
+          <?php endforeach; ?>
         </div>
         <div class="section-actions">
           <a class="button button-primary button-large" href="<?php echo esc_url( $na_whatsapp_url ); ?>" target="_blank" rel="noopener">
@@ -294,26 +227,16 @@ if ( neuroaprender_is_visual_builder_request() ) {
           <h2 id="pacotes-title"><?php neuroaprender_text( 'na_packages_title', 'Programas para fortalecer habilidades escolares' ); ?></h2>
         </div>
         <div class="package-grid">
-          <article class="package-card accent-blue">
-            <h3>NeuroLetras</h3>
-            <p>Apoio ao desenvolvimento da leitura e escrita.</p>
-          </article>
-          <article class="package-card accent-green">
-            <h3>NeuroAdvance</h3>
-            <p>Estímulo global para aprendizagem e desenvolvimento.</p>
-          </article>
-          <article class="package-card accent-purple">
-            <h3>NeuroFoco Plus</h3>
-            <p>Organização, atenção e fortalecimento das habilidades escolares.</p>
-          </article>
-          <article class="package-card accent-gold">
-            <h3>NeuroFoco Impulso</h3>
-            <p>Intervenções para foco, rotina e autonomia.</p>
-          </article>
-          <article class="package-card accent-yellow">
-            <h3>NeuroFoco Essencial</h3>
-            <p>Base de apoio para crianças em processo de aprendizagem.</p>
-          </article>
+          <?php foreach ( neuroaprender_builder_items( 'packages' ) as $package ) : ?>
+            <article class="package-card <?php echo esc_attr( $package['accent'] ?? 'accent-blue' ); ?>">
+              <?php if ( ! empty( $package['title'] ) ) : ?>
+                <h3><?php echo esc_html( $package['title'] ); ?></h3>
+              <?php endif; ?>
+              <?php if ( ! empty( $package['text'] ) ) : ?>
+                <p><?php echo esc_html( $package['text'] ); ?></p>
+              <?php endif; ?>
+            </article>
+          <?php endforeach; ?>
         </div>
         <div class="section-actions">
           <a class="button button-primary button-large" href="<?php echo esc_url( $na_whatsapp_url ); ?>" target="_blank" rel="noopener">
@@ -337,16 +260,11 @@ if ( neuroaprender_is_visual_builder_request() ) {
           <button class="gallery-control gallery-prev" type="button" aria-label="Ver materiais anteriores">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
           </button>
-        <div class="promo-strip gallery-track" aria-label="Materiais de avaliação e promoções">
-          <figure class="promo-card"><img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-01.webp' ) ); ?>" alt="Material informativo sobre avaliação neuropsicológica"></figure>
-          <figure class="promo-card"><img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-03.webp' ) ); ?>" alt="Condição especial de avaliação NeuroAprender"></figure>
-          <figure class="promo-card"><img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-04.webp' ) ); ?>" alt="Pacote de avaliação da Clínica Escola NeuroAprender"></figure>
-          <figure class="promo-card"><img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-05.webp' ) ); ?>" alt="Material de promoção NeuroAprender"></figure>
-          <figure class="promo-card"><img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-06.webp' ) ); ?>" alt="Avaliação e atendimento multidisciplinar NeuroAprender"></figure>
-          <figure class="promo-card"><img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-07.webp' ) ); ?>" alt="Material informativo de avaliação infantil"></figure>
-          <figure class="promo-card"><img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-08.webp' ) ); ?>" alt="Pacote de avaliação infantil NeuroAprender"></figure>
-          <figure class="promo-card"><img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-09.webp' ) ); ?>" alt="Promoção de atendimento NeuroAprender"></figure>
-          <figure class="promo-card"><img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-10.webp' ) ); ?>" alt="Material informativo de pacote NeuroAprender"></figure>
+        <div class="promo-strip gallery-track" aria-label="Materiais de avaliacao e promocoes">
+          <?php foreach ( neuroaprender_builder_items( 'promo_items' ) as $promo_item ) : ?>
+            <?php if ( empty( $promo_item['image'] ) ) : continue; endif; ?>
+            <figure class="promo-card"><img loading="lazy" decoding="async" src="<?php echo esc_url( $promo_item['image'] ); ?>" alt="<?php echo esc_attr( $promo_item['alt'] ?? 'Material informativo da Clinica Escola NeuroAprender' ); ?>"></figure>
+          <?php endforeach; ?>
         </div>
           <button class="gallery-control gallery-next" type="button" aria-label="Ver próximos materiais">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
@@ -370,13 +288,10 @@ if ( neuroaprender_is_visual_builder_request() ) {
           <h2 id="diferenciais-title">Por que escolher a NeuroAprender?</h2>
         </div>
         <div class="benefit-grid">
-          <div class="benefit-item">Atendimento humanizado e acolhedor</div>
-          <div class="benefit-item">Equipe interdisciplinar</div>
-          <div class="benefit-item">Olhar individualizado para cada criança</div>
-          <div class="benefit-item">Orientação para famílias</div>
-          <div class="benefit-item">Integração entre saúde, educação e desenvolvimento</div>
-          <div class="benefit-item">Espaço pensado para o público infantil</div>
-          <div class="benefit-item">Acompanhamento com objetivos claros</div>
+          <?php foreach ( neuroaprender_builder_items( 'benefits' ) as $benefit ) : ?>
+            <?php if ( empty( $benefit['text'] ) ) : continue; endif; ?>
+            <div class="benefit-item"><?php echo esc_html( $benefit['text'] ); ?></div>
+          <?php endforeach; ?>
         </div>
       </section>
 
@@ -411,18 +326,10 @@ if ( neuroaprender_is_visual_builder_request() ) {
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
           </button>
         <div class="team-photo-grid gallery-track" aria-label="Materiais da equipe NeuroAprender">
-          <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-23.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
-          <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-22.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
-          <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-21.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
-          <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-20.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
-          <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-19.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
-          <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-18.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
-          <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-17.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
-          <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-16.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
-          <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-15.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
-          <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-14.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
-          <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-13.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
-          <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-02.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
+          <?php foreach ( neuroaprender_builder_items( 'team_items' ) as $team_item ) : ?>
+            <?php if ( empty( $team_item['image'] ) ) : continue; endif; ?>
+            <img loading="lazy" decoding="async" src="<?php echo esc_url( $team_item['image'] ); ?>" alt="<?php echo esc_attr( $team_item['alt'] ?? 'Material da equipe NeuroAprender' ); ?>">
+          <?php endforeach; ?>
         </div>
           <button class="gallery-control gallery-next" type="button" aria-label="Ver próximos profissionais">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>

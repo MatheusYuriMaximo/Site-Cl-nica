@@ -186,6 +186,8 @@ function neuroaprender_maps_url(): string {
 	return 'https://www.google.com/maps?q=' . rawurlencode( $address ) . '&output=embed';
 }
 
+require_once get_template_directory() . '/inc/landing-builder.php';
+
 function neuroaprender_ai_enabled(): bool {
 	return '0' !== (string) neuroaprender_field( 'na_ai_enabled', '1' );
 }
@@ -517,6 +519,15 @@ function neuroaprender_admin_menu(): void {
 		'dashicons-welcome-learn-more',
 		25
 	);
+
+	add_submenu_page(
+		'neuroaprender-landing',
+		'Editor visual da landing',
+		'Editor Visual',
+		'edit_pages',
+		'neuroaprender-builder',
+		'neuroaprender_landing_builder_admin_page'
+	);
 }
 add_action( 'admin_menu', 'neuroaprender_admin_menu' );
 
@@ -539,6 +550,7 @@ function neuroaprender_render_landing_admin_page(): void {
 			</div>
 			<p>
 				<a class="button button-primary button-hero" href="<?php echo esc_url( get_edit_post_link( $page_id, 'raw' ) ); ?>">Editar campos da landing</a>
+				<a class="button button-primary" href="<?php echo esc_url( admin_url( 'admin.php?page=neuroaprender-builder' ) ); ?>">Abrir editor visual</a>
 				<a class="button button-hero" href="<?php echo esc_url( home_url( '/' ) ); ?>" target="_blank" rel="noopener">Ver site publicado</a>
 			</p>
 			<p>O site publicado usa o template visual original. Na tela de edicao da pagina inicial, altere os campos <strong>NeuroAprender - Conteudo da Landing Page</strong> para trocar textos, contato, mascote, mapa e informacoes do bot.</p>
