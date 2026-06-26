@@ -63,7 +63,9 @@ O tema aplica um limite simples de 20 mensagens por minuto por IP para reduzir a
 
 Se o widget aparecer, mas responder apenas com mensagem de erro, a chave foi lida pelo WordPress e a falha esta na chamada para a OpenAI.
 
-Depois de instalar a versao 1.2.1 do tema, teste o bot uma vez e confira os logs do site no CloudPanel:
+Depois de instalar a versao 1.2.3 do tema, teste o bot uma vez. O proprio chat deve indicar se o problema parece ser chave, creditos/billing, modelo ou conexao da VPS.
+
+Para ver o detalhe tecnico, confira os logs do site no CloudPanel:
 
 ```text
 Sites > neuroaprenderap.com.br > Logs
@@ -82,6 +84,12 @@ As causas mais comuns sao:
 - modelo sem acesso na conta;
 - VPS sem conexao de saida para `api.openai.com`;
 - campo `Modelo OpenAI` alterado no WordPress para um nome invalido.
+
+No campo `Modelo OpenAI`, use:
+
+```text
+gpt-4o-mini
+```
 
 ## Se O Botao Nao Abrir
 

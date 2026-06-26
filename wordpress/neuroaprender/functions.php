@@ -164,7 +164,7 @@ function neuroaprender_openai_api_key(): string {
 function neuroaprender_ai_model(): string {
 	$model = (string) neuroaprender_field( 'na_ai_model', '' );
 
-	return '' !== $model ? $model : 'gpt-4.1-mini';
+	return '' !== $model ? $model : 'gpt-4o-mini';
 }
 
 function neuroaprender_ai_system_prompt(): string {
@@ -243,6 +243,30 @@ function neuroaprender_ai_log_error( string $message, array $context = array() )
 	error_log( '[NeuroAprender AI] ' . $message . ( $safe_context ? ' ' . wp_json_encode( $safe_context ) : '' ) );
 }
 
+function neuroaprender_ai_public_error_message( int $status, string $error_message ): string {
+	if ( 400 === $status ) {
+		if ( false !== stripos( $error_message, 'model' ) ) {
+			return 'O modelo configurado para o assistente precisa ser revisado. No WordPress, confira o campo Modelo OpenAI na aba Bot IA.';
+		}
+
+		return 'A configuracao do assistente precisa ser revisada. Confira os campos da aba Bot IA no WordPress.';
+	}
+
+	if ( 401 === $status || 403 === $status ) {
+		return 'A chave da OpenAI nao foi aceita. Confira se a chave foi copiada inteira no wp-config.php e se pertence ao projeto correto.';
+	}
+
+	if ( 429 === $status ) {
+		return 'A conta da OpenAI atingiu limite de uso ou ainda nao possui creditos/billing ativo.';
+	}
+
+	if ( $status >= 500 ) {
+		return 'A OpenAI ficou indisponivel no momento. Tente novamente em alguns instantes.';
+	}
+
+	return 'O assistente nao conseguiu responder agora. Verifique a chave, os creditos da OpenAI e o modelo configurado.';
+}
+
 function neuroaprender_rest_chat( WP_REST_Request $request ): WP_REST_Response {
 	if ( ! neuroaprender_ai_enabled() ) {
 		return new WP_REST_Response( array( 'message' => 'O assistente virtual está temporariamente desativado.' ), 403 );
@@ -311,7 +335,7 @@ function neuroaprender_rest_chat( WP_REST_Request $request ): WP_REST_Response {
 			)
 		);
 
-		return new WP_REST_Response( array( 'message' => 'Não foi possível conectar ao assistente agora. Tente novamente em instantes.' ), 502 );
+		return new WP_REST_Response( array( 'message' => 'A VPS nao conseguiu se conectar com a OpenAI. Verifique se o servidor consegue acessar api.openai.com.' ), 502 );
 	}
 
 	$status   = (int) wp_remote_retrieve_response_code( $response );
@@ -330,7 +354,7 @@ function neuroaprender_rest_chat( WP_REST_Request $request ): WP_REST_Response {
 			)
 		);
 
-		return new WP_REST_Response( array( 'message' => 'O assistente não conseguiu responder agora. Tente novamente em instantes.' ), 502 );
+		return new WP_REST_Response( array( 'message' => neuroaprender_ai_public_error_message( $status, $error_message ) ), 502 );
 	}
 
 	$text = trim( neuroaprender_extract_response_text( $body ) );
@@ -695,7 +719,7 @@ function neuroaprender_register_acf_fields(): void {
 					'label'         => 'Modelo OpenAI',
 					'name'          => 'na_ai_model',
 					'type'          => 'text',
-					'default_value' => 'gpt-4.1-mini',
+					'default_value' => 'gpt-4o-mini',
 					'instructions'  => 'Altere apenas se souber qual modelo está disponível na conta OpenAI.',
 				),
 				array(
