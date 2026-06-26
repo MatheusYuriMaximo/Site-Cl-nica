@@ -98,6 +98,26 @@ function neuroaprender_page_has_visual_content( int $post_id ): bool {
 	return '' !== (string) $elementor_data || 'builder' === $elementor_mode;
 }
 
+function neuroaprender_is_visual_builder_request(): bool {
+	if ( isset( $_GET['elementor-preview'] ) || isset( $_GET['elementor_library'] ) ) {
+		return true;
+	}
+
+	if ( did_action( 'elementor/loaded' ) && class_exists( '\Elementor\Plugin' ) ) {
+		$elementor = \Elementor\Plugin::$instance;
+
+		if ( isset( $elementor->editor ) && method_exists( $elementor->editor, 'is_edit_mode' ) && $elementor->editor->is_edit_mode() ) {
+			return true;
+		}
+
+		if ( isset( $elementor->preview ) && method_exists( $elementor->preview, 'is_preview_mode' ) && $elementor->preview->is_preview_mode() ) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
 function neuroaprender_field( string $name, $default = '' ) {
 	if ( function_exists( 'get_field' ) ) {
 		$value = get_field( $name, neuroaprender_content_post_id() );

@@ -16,7 +16,7 @@ $na_maps_url           = neuroaprender_maps_url();
 $na_mascot_url         = neuroaprender_image_uri( 'na_mascot_image', 'assets/mascote-neuroaprender-novo-transparente.webp' );
 $na_front_page_id      = neuroaprender_content_post_id();
 
-if ( neuroaprender_page_has_visual_content( $na_front_page_id ) ) {
+if ( neuroaprender_is_visual_builder_request() || neuroaprender_page_has_visual_content( $na_front_page_id ) ) {
 	while ( have_posts() ) {
 		the_post();
 		?>
