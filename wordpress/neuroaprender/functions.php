@@ -525,14 +525,12 @@ function neuroaprender_render_landing_admin_page(): void {
 	?>
 	<div class="wrap">
 		<h1>Landing Page NeuroAprender</h1>
-		<p>Use esta tela como atalho para editar a pagina inicial publicada da clinica. Para edicao visual completa, use Elementor na pagina inicial ativa.</p>
+		<p>Use esta tela como atalho para editar a pagina inicial publicada da clinica preservando o visual original do tema.</p>
 
-		<?php if ( isset( $_GET['na_elementor_seed'] ) && 'success' === $_GET['na_elementor_seed'] ) : ?>
-			<div class="notice notice-success inline"><p><strong>Landing Elementor criada.</strong> A pagina inicial agora contem uma versao editavel da landing.</p></div>
-		<?php elseif ( isset( $_GET['na_elementor_seed'] ) && 'missing_elementor' === $_GET['na_elementor_seed'] ) : ?>
-			<div class="notice notice-error inline"><p><strong>Elementor nao encontrado.</strong> Instale e ative o plugin Elementor antes de gerar a versao editavel.</p></div>
-		<?php elseif ( isset( $_GET['na_elementor_seed'] ) && 'error' === $_GET['na_elementor_seed'] ) : ?>
-			<div class="notice notice-error inline"><p><strong>Nao foi possivel gerar a landing Elementor.</strong></p></div>
+		<?php if ( isset( $_GET['na_restore'] ) && 'success' === $_GET['na_restore'] ) : ?>
+			<div class="notice notice-success inline"><p><strong>Landing restaurada.</strong> O site publico voltou a usar o template visual original da NeuroAprender.</p></div>
+		<?php elseif ( isset( $_GET['na_restore'] ) && 'error' === $_GET['na_restore'] ) : ?>
+			<div class="notice notice-error inline"><p><strong>Nao foi possivel restaurar a landing.</strong></p></div>
 		<?php endif; ?>
 
 		<?php if ( $page_id > 0 ) : ?>
@@ -540,48 +538,71 @@ function neuroaprender_render_landing_admin_page(): void {
 				<p><strong>Pagina inicial ativa:</strong> <?php echo esc_html( get_the_title( $page_id ) ); ?></p>
 			</div>
 			<p>
-				<a class="button button-primary button-hero" href="<?php echo esc_url( get_edit_post_link( $page_id, 'raw' ) ); ?>">Abrir pagina para editar</a>
+				<a class="button button-primary button-hero" href="<?php echo esc_url( get_edit_post_link( $page_id, 'raw' ) ); ?>">Editar campos da landing</a>
 				<a class="button button-hero" href="<?php echo esc_url( home_url( '/' ) ); ?>" target="_blank" rel="noopener">Ver site publicado</a>
 			</p>
-			<p>Se a pagina tiver conteudo criado no Elementor ou no editor de blocos, esse conteudo visual sera exibido no site. Se ela estiver vazia, o tema mostra a landing fixa atual como fallback.</p>
-			<p>Os campos <strong>NeuroAprender - Conteudo da Landing Page</strong> continuam disponiveis como edicao simples do fallback.</p>
+			<p>O site publicado usa o template visual original. Na tela de edicao da pagina inicial, altere os campos <strong>NeuroAprender - Conteudo da Landing Page</strong> para trocar textos, contato, mascote, mapa e informacoes do bot.</p>
 			<hr>
-			<h2>Criar versao editavel no Elementor</h2>
-			<p>Este botao preenche a pagina inicial atual com uma versao Elementor da landing. Ele nao cria uma pagina nova; usa a pagina inicial existente.</p>
-			<p><strong>Atenção:</strong> se a pagina inicial ja tiver conteudo Elementor, ele sera substituido pelo modelo inicial da NeuroAprender.</p>
+			<h2>Restaurar visual original</h2>
+			<p>Use esta acao se a pagina inicial tiver recebido conteudo do Elementor ou do editor de blocos e voce quiser limpar esse conteudo sem apagar os campos da landing.</p>
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-				<?php wp_nonce_field( 'neuroaprender_seed_elementor_landing' ); ?>
-				<input type="hidden" name="action" value="neuroaprender_seed_elementor_landing">
-				<button class="button button-primary" type="submit">Gerar landing editavel no Elementor</button>
+				<?php wp_nonce_field( 'neuroaprender_restore_template_landing' ); ?>
+				<input type="hidden" name="action" value="neuroaprender_restore_template_landing">
+				<button class="button" type="submit">Limpar conteudo Elementor e manter template original</button>
 			</form>
 		<?php else : ?>
 			<div class="notice notice-warning inline">
 				<p><strong>A pagina inicial estatica ainda nao foi definida.</strong></p>
 			</div>
-			<p>O site ainda esta usando o template fixo como pagina inicial. Voce pode configurar manualmente a pagina inicial ou gerar agora uma versao editavel no Elementor usando a pagina <strong>Inicio</strong> existente.</p>
+			<p>Escolha a pagina <strong>Inicio</strong> em <strong>Configuracoes &gt; Leitura &gt; Uma pagina estatica</strong>. Depois volte aqui para editar os campos da landing preservando o visual original.</p>
 			<p>
 				<a class="button button-primary" href="<?php echo esc_url( admin_url( 'options-reading.php' ) ); ?>">Configurar pagina inicial</a>
 				<a class="button" href="<?php echo esc_url( admin_url( 'post-new.php?post_type=page' ) ); ?>">Criar pagina</a>
 			</p>
-			<hr>
-			<h2>Gerar landing editavel no Elementor</h2>
-			<p>Este botao procura uma pagina chamada <strong>Inicio</strong>, define ela como pagina inicial e preenche com uma versao Elementor da landing. Se nao encontrar, cria a pagina automaticamente.</p>
-			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-				<?php wp_nonce_field( 'neuroaprender_seed_elementor_landing' ); ?>
-				<input type="hidden" name="action" value="neuroaprender_seed_elementor_landing">
-				<button class="button button-primary" type="submit">Gerar landing editavel no Elementor</button>
-			</form>
 		<?php endif; ?>
 	</div>
 	<?php
 }
+
+function neuroaprender_handle_restore_template_landing(): void {
+	if ( ! current_user_can( 'edit_pages' ) ) {
+		wp_die( esc_html__( 'Sem permissao para editar paginas.', 'neuroaprender' ) );
+	}
+
+	check_admin_referer( 'neuroaprender_restore_template_landing' );
+
+	$page_id = neuroaprender_landing_page_id();
+
+	if ( $page_id <= 0 || get_post( $page_id ) === null ) {
+		wp_safe_redirect( add_query_arg( 'na_restore', 'error', admin_url( 'admin.php?page=neuroaprender-landing' ) ) );
+		exit;
+	}
+
+	wp_update_post(
+		array(
+			'ID'           => $page_id,
+			'post_content' => '',
+		)
+	);
+
+	delete_post_meta( $page_id, '_elementor_edit_mode' );
+	delete_post_meta( $page_id, '_elementor_template_type' );
+	delete_post_meta( $page_id, '_elementor_version' );
+	delete_post_meta( $page_id, '_elementor_data' );
+	delete_post_meta( $page_id, '_elementor_page_settings' );
+	delete_post_meta( $page_id, '_wp_page_template' );
+
+	wp_safe_redirect( add_query_arg( 'na_restore', 'success', admin_url( 'admin.php?page=neuroaprender-landing' ) ) );
+	exit;
+}
+add_action( 'admin_post_neuroaprender_restore_template_landing', 'neuroaprender_handle_restore_template_landing' );
 
 function neuroaprender_front_page_editor_notice( WP_Post $post ): void {
 	if ( 'page' !== $post->post_type || (int) $post->ID !== neuroaprender_landing_page_id() ) {
 		return;
 	}
 
-	echo '<div class="notice notice-info inline"><p><strong>Esta e a landing page publicada da NeuroAprender.</strong> Para edicao visual completa, clique em <strong>Editar com Elementor</strong> e crie o conteudo nesta pagina. Quando houver conteudo visual aqui, ele substitui o template fixo atual. Os campos abaixo continuam editando apenas o fallback.</p></div>';
+	echo '<div class="notice notice-info inline"><p><strong>Esta e a landing page publicada da NeuroAprender.</strong> Para preservar a aparencia atual, edite os campos <strong>NeuroAprender - Conteudo da Landing Page</strong> abaixo. Nao e necessario abrir no Elementor para alterar textos, contatos, mascote e configuracoes do bot.</p></div>';
 }
 add_action( 'edit_form_after_title', 'neuroaprender_front_page_editor_notice' );
 
