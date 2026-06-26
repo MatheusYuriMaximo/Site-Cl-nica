@@ -10,7 +10,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 function neuroaprender_asset_uri( string $path ): string {
-	return get_template_directory_uri() . '/' . ltrim( $path, '/' );
+	$path = ltrim( $path, '/' );
+
+	if ( file_exists( neuroaprender_asset_path( $path ) ) ) {
+		return get_stylesheet_directory_uri() . '/' . $path;
+	}
+
+	return 'https://matheusyurimaximo.github.io/Site-Cl-nica/' . $path;
 }
 
 function neuroaprender_asset_path( string $path ): string {
