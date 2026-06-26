@@ -63,7 +63,7 @@ O tema aplica um limite simples de 20 mensagens por minuto por IP para reduzir a
 
 Se o widget aparecer, mas responder apenas com mensagem de erro, a chave foi lida pelo WordPress e a falha esta na chamada para a OpenAI.
 
-Depois de instalar a versao 1.2.3 do tema, teste o bot uma vez. O proprio chat deve indicar se o problema parece ser chave, creditos/billing, modelo ou conexao da VPS.
+Depois de instalar a versao 1.2.4 do tema, teste o bot uma vez. Para o visitante, qualquer falha aparece como uma mensagem generica. O detalhe tecnico fica apenas nos logs do servidor.
 
 Para ver o detalhe tecnico, confira os logs do site no CloudPanel:
 
