@@ -231,6 +231,18 @@ function neuroaprender_chat_rate_limited(): bool {
 	return false;
 }
 
+function neuroaprender_ai_log_error( string $message, array $context = array() ): void {
+	$safe_context = array();
+
+	foreach ( $context as $key => $value ) {
+		if ( is_scalar( $value ) || null === $value ) {
+			$safe_context[ $key ] = neuroaprender_limit_text( (string) $value, 700 );
+		}
+	}
+
+	error_log( '[NeuroAprender AI] ' . $message . ( $safe_context ? ' ' . wp_json_encode( $safe_context ) : '' ) );
+}
+
 function neuroaprender_rest_chat( WP_REST_Request $request ): WP_REST_Response {
 	if ( ! neuroaprender_ai_enabled() ) {
 		return new WP_REST_Response( array( 'message' => 'O assistente virtual está temporariamente desativado.' ), 403 );
@@ -253,13 +265,8 @@ function neuroaprender_rest_chat( WP_REST_Request $request ): WP_REST_Response {
 		return new WP_REST_Response( array( 'message' => 'Digite uma pergunta para o assistente.' ), 400 );
 	}
 
-	$history = $request->get_param( 'history' );
-	$input   = array(
-		array(
-			'role'    => 'system',
-			'content' => neuroaprender_ai_system_prompt(),
-		),
-	);
+	$history      = $request->get_param( 'history' );
+	$conversation = '';
 
 	if ( is_array( $history ) ) {
 		$history = array_slice( $history, -6 );
@@ -269,18 +276,13 @@ function neuroaprender_rest_chat( WP_REST_Request $request ): WP_REST_Response {
 				continue;
 			}
 
-			$role = 'assistant' === $entry['role'] ? 'assistant' : 'user';
-			$input[] = array(
-				'role'    => $role,
-				'content' => neuroaprender_limit_text( sanitize_textarea_field( (string) $entry['content'] ), 900 ),
-			);
+			$role          = 'assistant' === $entry['role'] ? 'assistant' : 'user';
+			$label         = 'assistant' === $role ? 'Assistente' : 'Visitante';
+			$conversation .= $label . ': ' . neuroaprender_limit_text( sanitize_textarea_field( (string) $entry['content'] ), 900 ) . "\n";
 		}
 	}
 
-	$input[] = array(
-		'role'    => 'user',
-		'content' => $message,
-	);
+	$conversation .= 'Visitante: ' . $message;
 
 	$response = wp_remote_post(
 		'https://api.openai.com/v1/responses',
@@ -293,7 +295,8 @@ function neuroaprender_rest_chat( WP_REST_Request $request ): WP_REST_Response {
 			'body'    => wp_json_encode(
 				array(
 					'model'             => neuroaprender_ai_model(),
-					'input'             => $input,
+					'instructions'      => neuroaprender_ai_system_prompt(),
+					'input'             => $conversation,
 					'max_output_tokens' => 450,
 				)
 			),
@@ -301,13 +304,32 @@ function neuroaprender_rest_chat( WP_REST_Request $request ): WP_REST_Response {
 	);
 
 	if ( is_wp_error( $response ) ) {
+		neuroaprender_ai_log_error(
+			'Falha ao conectar com a OpenAI.',
+			array(
+				'error' => $response->get_error_message(),
+			)
+		);
+
 		return new WP_REST_Response( array( 'message' => 'Não foi possível conectar ao assistente agora. Tente novamente em instantes.' ), 502 );
 	}
 
-	$status = (int) wp_remote_retrieve_response_code( $response );
-	$body   = json_decode( (string) wp_remote_retrieve_body( $response ), true );
+	$status   = (int) wp_remote_retrieve_response_code( $response );
+	$raw_body = (string) wp_remote_retrieve_body( $response );
+	$body     = json_decode( $raw_body, true );
 
 	if ( $status < 200 || $status >= 300 || ! is_array( $body ) ) {
+		$error_message = is_array( $body ) && isset( $body['error']['message'] ) ? (string) $body['error']['message'] : $raw_body;
+
+		neuroaprender_ai_log_error(
+			'Resposta de erro da OpenAI.',
+			array(
+				'status' => $status,
+				'model'  => neuroaprender_ai_model(),
+				'error'  => $error_message,
+			)
+		);
+
 		return new WP_REST_Response( array( 'message' => 'O assistente não conseguiu responder agora. Tente novamente em instantes.' ), 502 );
 	}
 
