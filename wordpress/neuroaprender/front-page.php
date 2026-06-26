@@ -75,7 +75,7 @@ get_header();
         </div>
 
         <div class="hero-visual" aria-label="Mascote da Clínica Escola NeuroAprender">
-          <img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/mascote-neuroaprender-novo.webp' ) ); ?>" alt="Mascote infantil acolhedor da Clínica Escola NeuroAprender" loading="eager" decoding="async" fetchpriority="high">
+          <img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/mascote-neuroaprender-novo-transparente.webp' ) ); ?>" alt="Mascote infantil acolhedor da Clínica Escola NeuroAprender" loading="eager" decoding="async" fetchpriority="high">
           <div class="hero-note">
             <strong>Atendimento interdisciplinar</strong>
             <span>Saúde, educação e família caminhando juntas.</span>
