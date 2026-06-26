@@ -558,11 +558,19 @@ function neuroaprender_render_landing_admin_page(): void {
 			<div class="notice notice-warning inline">
 				<p><strong>A pagina inicial estatica ainda nao foi definida.</strong></p>
 			</div>
-			<p>Para editar a landing por GUI nesta pagina especifica, crie ou escolha uma pagina do WordPress e defina em <strong>Configuracoes &gt; Leitura &gt; Uma pagina estatica</strong>.</p>
+			<p>O site ainda esta usando o template fixo como pagina inicial. Voce pode configurar manualmente a pagina inicial ou gerar agora uma versao editavel no Elementor usando a pagina <strong>Inicio</strong> existente.</p>
 			<p>
 				<a class="button button-primary" href="<?php echo esc_url( admin_url( 'options-reading.php' ) ); ?>">Configurar pagina inicial</a>
 				<a class="button" href="<?php echo esc_url( admin_url( 'post-new.php?post_type=page' ) ); ?>">Criar pagina</a>
 			</p>
+			<hr>
+			<h2>Gerar landing editavel no Elementor</h2>
+			<p>Este botao procura uma pagina chamada <strong>Inicio</strong>, define ela como pagina inicial e preenche com uma versao Elementor da landing. Se nao encontrar, cria a pagina automaticamente.</p>
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+				<?php wp_nonce_field( 'neuroaprender_seed_elementor_landing' ); ?>
+				<input type="hidden" name="action" value="neuroaprender_seed_elementor_landing">
+				<button class="button button-primary" type="submit">Gerar landing editavel no Elementor</button>
+			</form>
 		<?php endif; ?>
 	</div>
 	<?php

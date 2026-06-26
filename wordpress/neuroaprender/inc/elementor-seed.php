@@ -331,6 +331,36 @@ function neuroaprender_seed_elementor_landing( int $page_id ): void {
 	update_post_meta( $page_id, '_wp_page_template', 'default' );
 }
 
+function neuroaprender_find_existing_landing_page(): int {
+	$slugs = array( 'inicio', 'início', 'home', 'homepage' );
+
+	foreach ( $slugs as $slug ) {
+		$page = get_page_by_path( $slug, OBJECT, 'page' );
+
+		if ( $page instanceof WP_Post ) {
+			return (int) $page->ID;
+		}
+	}
+
+	$pages = get_pages(
+		array(
+			'post_type'   => 'page',
+			'post_status' => array( 'publish', 'draft' ),
+			'number'      => 30,
+		)
+	);
+
+	foreach ( $pages as $page ) {
+		$title = remove_accents( strtolower( $page->post_title ) );
+
+		if ( in_array( $title, array( 'inicio', 'home', 'homepage' ), true ) ) {
+			return (int) $page->ID;
+		}
+	}
+
+	return 0;
+}
+
 function neuroaprender_handle_seed_elementor_landing(): void {
 	if ( ! current_user_can( 'edit_pages' ) ) {
 		wp_die( esc_html__( 'Sem permissao para editar paginas.', 'neuroaprender' ) );
@@ -346,6 +376,10 @@ function neuroaprender_handle_seed_elementor_landing(): void {
 	$page_id = neuroaprender_landing_page_id();
 
 	if ( $page_id <= 0 ) {
+		$page_id = neuroaprender_find_existing_landing_page();
+	}
+
+	if ( $page_id <= 0 ) {
 		$page_id = wp_insert_post(
 			array(
 				'post_title'  => 'Início',
@@ -353,15 +387,15 @@ function neuroaprender_handle_seed_elementor_landing(): void {
 				'post_status' => 'publish',
 			)
 		);
-
-		update_option( 'show_on_front', 'page' );
-		update_option( 'page_on_front', $page_id );
 	}
 
 	if ( is_wp_error( $page_id ) || $page_id <= 0 ) {
 		wp_safe_redirect( add_query_arg( 'na_elementor_seed', 'error', admin_url( 'admin.php?page=neuroaprender-landing' ) ) );
 		exit;
 	}
+
+	update_option( 'show_on_front', 'page' );
+	update_option( 'page_on_front', (int) $page_id );
 
 	neuroaprender_seed_elementor_landing( (int) $page_id );
 
