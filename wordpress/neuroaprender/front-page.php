@@ -75,7 +75,7 @@ get_header();
         </div>
 
         <div class="hero-visual" aria-label="Mascote da Clínica Escola NeuroAprender">
-          <img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/mascote-neuroaprender-novo.png' ) ); ?>" alt="Mascote infantil acolhedor da Clínica Escola NeuroAprender">
+          <img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/mascote-neuroaprender-novo.webp' ) ); ?>" alt="Mascote infantil acolhedor da Clínica Escola NeuroAprender" loading="eager" decoding="async" fetchpriority="high">
           <div class="hero-note">
             <strong>Atendimento interdisciplinar</strong>
             <span>Saúde, educação e família caminhando juntas.</span>
@@ -140,43 +140,43 @@ get_header();
           </button>
         <div class="clinic-gallery gallery-track" aria-label="Fotos da Clínica Escola NeuroAprender">
           <figure class="clinic-photo clinic-photo-featured">
-            <img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/clinica/entrada.webp' ) ); ?>" alt="Entrada da Clínica Escola NeuroAprender">
+            <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/clinica/entrada.webp' ) ); ?>" alt="Entrada da Clínica Escola NeuroAprender">
             <figcaption>Entrada da clínica</figcaption>
           </figure>
           <figure class="clinic-photo">
-            <img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/clinica/frente.webp' ) ); ?>" alt="Frente da Clínica Escola NeuroAprender">
+            <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/clinica/frente.webp' ) ); ?>" alt="Frente da Clínica Escola NeuroAprender">
             <figcaption>Fachada</figcaption>
           </figure>
           <figure class="clinic-photo">
-            <img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/clinica/recepcao-2.webp' ) ); ?>" alt="Recepção da Clínica Escola NeuroAprender">
+            <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/clinica/recepcao-2.webp' ) ); ?>" alt="Recepção da Clínica Escola NeuroAprender">
             <figcaption>Recepção</figcaption>
           </figure>
           <figure class="clinic-photo">
-            <img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-11.webp' ) ); ?>" alt="Recepção da Clínica Escola NeuroAprender">
+            <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-11.webp' ) ); ?>" alt="Recepção da Clínica Escola NeuroAprender">
             <figcaption>Recepção</figcaption>
           </figure>
           <figure class="clinic-photo">
-            <img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/clinica/atendimento-clinico.webp' ) ); ?>" alt="Sala de atendimento clínico">
+            <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/clinica/atendimento-clinico.webp' ) ); ?>" alt="Sala de atendimento clínico">
             <figcaption>Atendimento clínico</figcaption>
           </figure>
           <figure class="clinic-photo">
-            <img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/clinica/fono.webp' ) ); ?>" alt="Sala de fonoaudiologia">
+            <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/clinica/fono.webp' ) ); ?>" alt="Sala de fonoaudiologia">
             <figcaption>Fonoaudiologia</figcaption>
           </figure>
           <figure class="clinic-photo">
-            <img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/clinica/ocupacional.webp' ) ); ?>" alt="Sala de terapia ocupacional">
+            <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/clinica/ocupacional.webp' ) ); ?>" alt="Sala de terapia ocupacional">
             <figcaption>Terapia ocupacional</figcaption>
           </figure>
           <figure class="clinic-photo">
-            <img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/clinica/psicomotricista.webp' ) ); ?>" alt="Sala de psicomotricidade">
+            <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/clinica/psicomotricista.webp' ) ); ?>" alt="Sala de psicomotricidade">
             <figcaption>Psicomotricidade</figcaption>
           </figure>
           <figure class="clinic-photo">
-            <img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/clinica/administracao.webp' ) ); ?>" alt="Área administrativa da clínica">
+            <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/clinica/administracao.webp' ) ); ?>" alt="Área administrativa da clínica">
             <figcaption>Administração</figcaption>
           </figure>
           <figure class="clinic-photo">
-            <img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/clinica/cozinha.webp' ) ); ?>" alt="Área de apoio da clínica">
+            <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/clinica/cozinha.webp' ) ); ?>" alt="Área de apoio da clínica">
             <figcaption>Área de apoio</figcaption>
           </figure>
         </div>
@@ -322,15 +322,15 @@ get_header();
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
           </button>
         <div class="promo-strip gallery-track" aria-label="Materiais de avaliação e promoções">
-          <figure class="promo-card"><img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-01.webp' ) ); ?>" alt="Material informativo sobre avaliação neuropsicológica"></figure>
-          <figure class="promo-card"><img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-03.webp' ) ); ?>" alt="Condição especial de avaliação NeuroAprender"></figure>
-          <figure class="promo-card"><img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-04.webp' ) ); ?>" alt="Pacote de avaliação da Clínica Escola NeuroAprender"></figure>
-          <figure class="promo-card"><img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-05.webp' ) ); ?>" alt="Material de promoção NeuroAprender"></figure>
-          <figure class="promo-card"><img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-06.webp' ) ); ?>" alt="Avaliação e atendimento multidisciplinar NeuroAprender"></figure>
-          <figure class="promo-card"><img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-07.webp' ) ); ?>" alt="Material informativo de avaliação infantil"></figure>
-          <figure class="promo-card"><img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-08.webp' ) ); ?>" alt="Pacote de avaliação infantil NeuroAprender"></figure>
-          <figure class="promo-card"><img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-09.webp' ) ); ?>" alt="Promoção de atendimento NeuroAprender"></figure>
-          <figure class="promo-card"><img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-10.webp' ) ); ?>" alt="Material informativo de pacote NeuroAprender"></figure>
+          <figure class="promo-card"><img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-01.webp' ) ); ?>" alt="Material informativo sobre avaliação neuropsicológica"></figure>
+          <figure class="promo-card"><img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-03.webp' ) ); ?>" alt="Condição especial de avaliação NeuroAprender"></figure>
+          <figure class="promo-card"><img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-04.webp' ) ); ?>" alt="Pacote de avaliação da Clínica Escola NeuroAprender"></figure>
+          <figure class="promo-card"><img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-05.webp' ) ); ?>" alt="Material de promoção NeuroAprender"></figure>
+          <figure class="promo-card"><img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-06.webp' ) ); ?>" alt="Avaliação e atendimento multidisciplinar NeuroAprender"></figure>
+          <figure class="promo-card"><img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-07.webp' ) ); ?>" alt="Material informativo de avaliação infantil"></figure>
+          <figure class="promo-card"><img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-08.webp' ) ); ?>" alt="Pacote de avaliação infantil NeuroAprender"></figure>
+          <figure class="promo-card"><img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-09.webp' ) ); ?>" alt="Promoção de atendimento NeuroAprender"></figure>
+          <figure class="promo-card"><img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-10.webp' ) ); ?>" alt="Material informativo de pacote NeuroAprender"></figure>
         </div>
           <button class="gallery-control gallery-next" type="button" aria-label="Ver próximos materiais">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
@@ -396,18 +396,18 @@ get_header();
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
           </button>
         <div class="team-photo-grid gallery-track" aria-label="Materiais da equipe NeuroAprender">
-          <img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-23.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
-          <img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-22.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
-          <img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-21.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
-          <img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-20.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
-          <img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-19.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
-          <img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-18.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
-          <img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-17.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
-          <img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-16.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
-          <img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-15.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
-          <img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-14.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
-          <img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-13.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
-          <img src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-02.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
+          <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-23.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
+          <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-22.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
+          <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-21.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
+          <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-20.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
+          <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-19.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
+          <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-18.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
+          <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-17.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
+          <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-16.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
+          <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-15.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
+          <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-14.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
+          <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-13.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
+          <img loading="lazy" decoding="async" src="<?php echo esc_url( neuroaprender_asset_uri( 'assets/promocoes/promo-02.webp' ) ); ?>" alt="Material da equipe NeuroAprender">
         </div>
           <button class="gallery-control gallery-next" type="button" aria-label="Ver próximos profissionais">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
