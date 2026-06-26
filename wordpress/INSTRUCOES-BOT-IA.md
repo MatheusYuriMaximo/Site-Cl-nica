@@ -82,3 +82,13 @@ As causas mais comuns sao:
 - modelo sem acesso na conta;
 - VPS sem conexao de saida para `api.openai.com`;
 - campo `Modelo OpenAI` alterado no WordPress para um nome invalido.
+
+## Se O Botao Nao Abrir
+
+Instale a versao `1.2.2` ou superior do tema. Ela corrige o empacotamento do ZIP para WordPress em Linux, garantindo que o arquivo abaixo seja instalado:
+
+```text
+assets/js/neuroaprender.js
+```
+
+Se esse arquivo nao existir dentro do tema instalado, o botao aparece, mas nao abre o painel.
