@@ -81,6 +81,23 @@ function neuroaprender_content_post_id(): int {
 	return (int) get_queried_object_id();
 }
 
+function neuroaprender_page_has_visual_content( int $post_id ): bool {
+	$post = get_post( $post_id );
+
+	if ( ! $post instanceof WP_Post ) {
+		return false;
+	}
+
+	if ( '' !== trim( (string) $post->post_content ) ) {
+		return true;
+	}
+
+	$elementor_data = get_post_meta( $post_id, '_elementor_data', true );
+	$elementor_mode = get_post_meta( $post_id, '_elementor_edit_mode', true );
+
+	return '' !== (string) $elementor_data || 'builder' === $elementor_mode;
+}
+
 function neuroaprender_field( string $name, $default = '' ) {
 	if ( function_exists( 'get_field' ) ) {
 		$value = get_field( $name, neuroaprender_content_post_id() );
@@ -400,17 +417,18 @@ function neuroaprender_render_landing_admin_page(): void {
 	?>
 	<div class="wrap">
 		<h1>Landing Page NeuroAprender</h1>
-		<p>Use esta tela como atalho para editar a pagina inicial publicada da clinica.</p>
+		<p>Use esta tela como atalho para editar a pagina inicial publicada da clinica. Para edicao visual completa, use Elementor na pagina inicial ativa.</p>
 
 		<?php if ( $page_id > 0 ) : ?>
 			<div class="notice notice-success inline">
 				<p><strong>Pagina inicial ativa:</strong> <?php echo esc_html( get_the_title( $page_id ) ); ?></p>
 			</div>
 			<p>
-				<a class="button button-primary button-hero" href="<?php echo esc_url( get_edit_post_link( $page_id, 'raw' ) ); ?>">Editar conteudo da landing</a>
+				<a class="button button-primary button-hero" href="<?php echo esc_url( get_edit_post_link( $page_id, 'raw' ) ); ?>">Abrir pagina para editar</a>
 				<a class="button button-hero" href="<?php echo esc_url( home_url( '/' ) ); ?>" target="_blank" rel="noopener">Ver site publicado</a>
 			</p>
-			<p>Na tela de edicao, use os campos <strong>NeuroAprender - Conteudo da Landing Page</strong>. Eles controlam textos, contato, hero, secoes, bot IA e demais informacoes da pagina publicada.</p>
+			<p>Se a pagina tiver conteudo criado no Elementor ou no editor de blocos, esse conteudo visual sera exibido no site. Se ela estiver vazia, o tema mostra a landing fixa atual como fallback.</p>
+			<p>Os campos <strong>NeuroAprender - Conteudo da Landing Page</strong> continuam disponiveis como edicao simples do fallback.</p>
 		<?php else : ?>
 			<div class="notice notice-warning inline">
 				<p><strong>A pagina inicial estatica ainda nao foi definida.</strong></p>
@@ -430,7 +448,7 @@ function neuroaprender_front_page_editor_notice( WP_Post $post ): void {
 		return;
 	}
 
-	echo '<div class="notice notice-info inline"><p><strong>Esta e a landing page publicada da NeuroAprender.</strong> Edite os campos abaixo em <strong>NeuroAprender - Conteudo da Landing Page</strong>; o conteudo visual do site e gerado por esses campos, nao pelo bloco de texto comum.</p></div>';
+	echo '<div class="notice notice-info inline"><p><strong>Esta e a landing page publicada da NeuroAprender.</strong> Para edicao visual completa, clique em <strong>Editar com Elementor</strong> e crie o conteudo nesta pagina. Quando houver conteudo visual aqui, ele substitui o template fixo atual. Os campos abaixo continuam editando apenas o fallback.</p></div>';
 }
 add_action( 'edit_form_after_title', 'neuroaprender_front_page_editor_notice' );
 

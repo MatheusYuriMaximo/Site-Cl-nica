@@ -14,6 +14,21 @@ $na_address            = (string) neuroaprender_field( 'na_address', 'Av. Quinze
 $na_hours              = (string) neuroaprender_field( 'na_hours', '08:00 às 12:00 e 14:00 às 18:00' );
 $na_maps_url           = neuroaprender_maps_url();
 $na_mascot_url         = neuroaprender_image_uri( 'na_mascot_image', 'assets/mascote-neuroaprender-novo-transparente.webp' );
+$na_front_page_id      = neuroaprender_content_post_id();
+
+if ( neuroaprender_page_has_visual_content( $na_front_page_id ) ) {
+	while ( have_posts() ) {
+		the_post();
+		?>
+		<main class="visual-builder-page" id="conteudo">
+			<?php the_content(); ?>
+		</main>
+		<?php
+	}
+
+	get_footer();
+	return;
+}
 ?>
 <header class="site-header" id="inicio">
       <a class="brand" href="#inicio" aria-label="Clínica Escola NeuroAprender">
