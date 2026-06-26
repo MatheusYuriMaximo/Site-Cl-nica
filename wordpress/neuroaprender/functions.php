@@ -244,7 +244,9 @@ function neuroaprender_ai_log_error( string $message, array $context = array() )
 }
 
 function neuroaprender_ai_public_error_message(): string {
-	return 'N?o consegui responder agora. Voc? pode chamar a equipe pelo WhatsApp para receber atendimento.';
+	$message = json_decode( '"N\u00e3o consegui responder agora. Voc\u00ea pode chamar a equipe pelo WhatsApp para receber atendimento."' );
+
+	return is_string( $message ) ? $message : 'Nao consegui responder agora. Voce pode chamar a equipe pelo WhatsApp para receber atendimento.';
 }
 
 function neuroaprender_rest_chat( WP_REST_Request $request ): WP_REST_Response {

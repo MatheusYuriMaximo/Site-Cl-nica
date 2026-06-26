@@ -11,7 +11,7 @@
 			array(
 				'endpoint'     => esc_url_raw( rest_url( 'neuroaprender/v1/chat' ) ),
 				'whatsappUrl'  => neuroaprender_whatsapp_url(),
-				'errorMessage' => 'Não consegui responder agora. Você pode chamar a equipe pelo WhatsApp.',
+				'errorMessage' => neuroaprender_ai_public_error_message(),
 			)
 		); ?>;
 	</script>
